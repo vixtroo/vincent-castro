@@ -26,7 +26,7 @@ const skills = [
   return (
     <main className="flex min-h-screen flex-col bg-white text-slate-100">
       <div className="flex flex-col items-center">
-        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white rounded-lg px-6 shadow-lg mt-6 z-1000">
+        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000">
           <div>
             <h1 className="text-5xl font-bold text-slate-950 ms-2">V<span className="text-blue-500">C.</span></h1>
           </div>
