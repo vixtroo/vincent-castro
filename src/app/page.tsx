@@ -1,13 +1,20 @@
-import {faKey, faArrowRight, faCloudDownload} from "@fortawesome/free-solid-svg-icons";
+import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 export default function Home() {
+
+const currentlyBuilding = {
+  "title": "CEO Dashboard",
+  "descriptions": ["Company Project Showcase", "Secure Authenticcation", "Project CRUD Management", "Modern & Responsive Interface"],
+  "stack": "PHP • CodeIgniter"
+}
+
   return (
     <main className="flex min-h-screen flex-col bg-white text-slate-100">
       <div className="flex flex-col items-center">
-        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white rounded-lg px-6 shadow-lg mt-6">
+        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white rounded-lg px-6 shadow-lg mt-6 z-1000">
           <div>
             <h1 className="text-5xl font-bold text-slate-950 ms-2">V<span className="text-blue-500">C.</span></h1>
           </div>
@@ -23,7 +30,7 @@ export default function Home() {
         </div>
       </div>
       <section id="about" className="flex flex-col justify-center px-16 pt-38 gap-6 bg-slate-50">
-        <div className="hero flex items-center">
+        <div className="hero flex gap-12">
           <div className="flex flex-col gap-4 max-w-xl z-10">
             <div className="px-3 py-2 bg-blue-50 rounded-3xl w-32">
               <h1 className="text-md font-bold text-blue-500">👋 Hello, I'm</h1>
@@ -36,7 +43,24 @@ export default function Home() {
               <Button variant="outline" size="default" className="border-slate-200 text-slate-950">Download Resume <FontAwesomeIcon icon={faCloudDownload}/></Button>
             </div>
           </div>
-          <Image src="/assets/display.png" alt="Vincent Castro" width={800} height={500} className="absolute z-0 right-0"/>
+          <div className="flex flex-col gap-4 z-10 bg-white w-[224px] shadow-lg p-4 rounded-lg mt-16 h-fit">
+            <h1 className="text-md font-semibold text-blue-500">Currently Building</h1>
+            <div className="flex gap-2 text-lg items-center">
+              <div className="p-2 bg-blue-50 rounded-lg">
+                <FontAwesomeIcon icon={faBarsStaggered} className="text-blue-500 h-4"/>
+              </div>
+              <h1 className="font-bold text-slate-950">{currentlyBuilding.title}</h1>
+            </div>
+            <ul className="flex flex-col gap-4 mt-2">
+              {currentlyBuilding.descriptions.map((description, index) => (
+                <li key={index} className="flex gap-2 text-sm text-slate-950"><FontAwesomeIcon icon={faCircleCheck} className="text-blue-500 h-4 mt-1"/>{description}</li>
+              ))}
+            </ul>
+            <div className="flex bg-slate-100 px-3 py-2 rounded-2xl text-xs text-slate-950 w-fit mb-1">{currentlyBuilding.stack}</div>
+          </div>
+          <div className="absolute z-0 right-0">
+            <Image src="/assets/display.png" alt="Vincent Castro" width={800} height={500}/>
+          </div>
         </div>
       </section>
       <footer className="bg-white text-slate-500 px-16 py-4 inset-x-0 bottom-0 text-sm border-t border-slate-200">
