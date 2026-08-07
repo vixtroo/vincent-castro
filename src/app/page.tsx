@@ -11,6 +11,18 @@ const currentlyBuilding = {
   "stack": "PHP • CodeIgniter"
 }
 
+const skills = [
+  {"name": "React", "icon": "/assets/React.png"},
+  {"name": "Next.js", "icon": "/assets/Next.js.png"},
+  {"name": "TypeScript", "icon": "/assets/TypeScript.png"},
+  {"name": "Node.js", "icon": "/assets/Node.js.png"},
+  {"name": "FlutterFlow", "icon": "/assets/FlutterFlow.jpeg"},
+  {"name": "PHP", "icon": "/assets/PHP.png"},
+  {"name": "CodeIgniter", "icon": "/assets/CodeIgniter.png"},
+  {"name": "PostgreSQL", "icon": "/assets/PostgresSQL.png"},
+  {"name": "Supabase", "icon": "/assets/Supabase.png"},
+]
+
   return (
     <main className="flex min-h-screen flex-col bg-white text-slate-100">
       <div className="flex flex-col items-center">
@@ -51,16 +63,24 @@ const currentlyBuilding = {
               </div>
               <h1 className="font-bold text-slate-950">{currentlyBuilding.title}</h1>
             </div>
-            <ul className="flex flex-col gap-4 mt-2">
+            <ul className="flex flex-col gap-4">
               {currentlyBuilding.descriptions.map((description, index) => (
                 <li key={index} className="flex gap-2 text-sm text-slate-950"><FontAwesomeIcon icon={faCircleCheck} className="text-blue-500 h-4 mt-1"/>{description}</li>
               ))}
             </ul>
             <div className="flex bg-slate-100 px-3 py-2 rounded-2xl text-xs text-slate-950 w-fit mb-1">{currentlyBuilding.stack}</div>
           </div>
-          <div className="absolute z-0 right-0">
-            <Image src="/assets/display.png" alt="Vincent Castro" width={800} height={500}/>
+          <div className="absolute right-0">
+            <Image src="/assets/laptop_display.png" alt="Vincent Castro" width={800} height={500}/>
           </div>
+        </div>
+        <div className="flex max-w-3xl gap-4 flex-wrap mt-4 mb-6" id="skills">
+          {skills.map((skill, index) =>(
+            <div key={index} className="flex w-fit rounded-lg bg-white border border-slate-200 gap-2 p-3 shadow-sm">
+              <Image src={skill.icon} alt={skill.name} width={20} height={20}/>
+              <p className="text-sm text-slate-950">{skill.name}</p>
+            </div>
+          ))}
         </div>
       </section>
       <footer className="bg-white text-slate-500 px-16 py-4 inset-x-0 bottom-0 text-sm border-t border-slate-200">
