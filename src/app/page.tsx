@@ -1,31 +1,46 @@
-import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck} from "@fortawesome/free-solid-svg-icons";
+"use client";
+
+import { useEffect, useState } from "react";
+import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck, faMoon, faSun} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import ThemeToggle from "@/components/ui/toggle_button";
 
 export default function Home() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
 
-const currentlyBuilding = {
-  "title": "CEO Dashboard",
-  "descriptions": ["Company Project Showcase", "Secure Authenticcation", "Project CRUD Management", "Modern & Responsive Interface"],
-  "stack": "PHP • CodeIgniter"
-}
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme === "dark") {
+      setTheme("dark");
+    }
+  }, []);
 
-const skills = [
-  {"name": "React", "icon": "/assets/React.png"},
-  {"name": "Next.js", "icon": "/assets/Next.js.png"},
-  {"name": "TypeScript", "icon": "/assets/TypeScript.png"},
-  {"name": "Node.js", "icon": "/assets/Node.js.png"},
-  {"name": "FlutterFlow", "icon": "/assets/FlutterFlow.jpeg"},
-  {"name": "PHP", "icon": "/assets/PHP.png"},
-  {"name": "CodeIgniter", "icon": "/assets/CodeIgniter.png"},
-  {"name": "PostgreSQL", "icon": "/assets/PostgresSQL.png"},
-  {"name": "Supabase", "icon": "/assets/Supabase.png"},
-]
+  const currentlyBuilding = {
+    "title": "CEO Dashboard",
+    "descriptions": ["Company Project Showcase", "Secure Authenticcation", "Project CRUD Management", "Modern & Responsive Interface"],
+    "stack": "PHP • CodeIgniter"
+  }
+
+  const skills = [
+    {"name": "React", "icon": "/assets/React.png"},
+    {"name": "Next.js", "icon": "/assets/Next.js.png"},
+    {"name": "TypeScript", "icon": "/assets/TypeScript.png"},
+    {"name": "Node.js", "icon": "/assets/Node.js.png"},
+    {"name": "FlutterFlow", "icon": "/assets/FlutterFlow.jpeg"},
+    {"name": "PHP", "icon": "/assets/PHP.png"},
+    {"name": "CodeIgniter", "icon": "/assets/CodeIgniter.png"},
+    {"name": "PostgreSQL", "icon": "/assets/PostgresSQL.png"},
+    {"name": "Supabase", "icon": "/assets/Supabase.png"},
+  ]
 
   return (
     <main className="flex min-h-screen flex-col bg-white text-slate-100">
       <div className="flex flex-col items-center">
+
+        {/* NAVBAR */}
+        
         <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000">
           <div>
             <h1 className="text-5xl font-bold text-slate-950 ms-2">V<span className="text-blue-500">C.</span></h1>
@@ -41,6 +56,9 @@ const skills = [
           <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600"><FontAwesomeIcon icon={faKey}/>Login</Button>
         </div>
       </div>
+
+      {/* ABOUT */}
+
       <section id="about" className="flex flex-col justify-center px-16 pt-38 gap-6 bg-slate-50">
         <div className="hero flex gap-12">
           <div className="flex flex-col gap-4 max-w-xl z-10">
@@ -74,7 +92,7 @@ const skills = [
             <Image src="/assets/laptop_display.png" alt="Vincent Castro" width={800} height={500}/>
           </div>
         </div>
-        <div className="flex max-w-3xl gap-4 flex-wrap mt-4 mb-6" id="skills">
+        <div className="flex max-w-3xl gap-4 flex-wrap mt-4 mb-6">
           {skills.map((skill, index) =>(
             <div key={index} className="flex w-fit rounded-lg bg-white border border-slate-200 gap-2 p-3 shadow-sm">
               <Image src={skill.icon} alt={skill.name} width={20} height={20}/>
@@ -83,6 +101,41 @@ const skills = [
           ))}
         </div>
       </section>
+      <div className="flex items-start px-16 py-8">
+          <div className="flex gap-6 w-1/2">
+            <div className="flex-shrink-0">
+              <Image src={theme === "dark" ? "/assets/teng_dark.png" : "/assets/teng_light.JPG"} alt="Vincent Castro" width={100} height={120} className="rounded-lg"/>
+            </div>
+            <div className="flex flex-col gap-2">
+              <h1 className="text-md text-blue-500 font-semibold">ABOUT ME</h1>
+              <p className="text-sm text-slate-950 text-sm max-w-lg">I am a Frontend Developer with more than 2 years of professional experience building enterprise web and mobile applications. I specialize in React, Next.js, TypeScript, and Flutterflow, while also developing backend services with Node.js and Supabase. I enjoy creating clean, maintainable software that delivers real business value.</p>
+            </div>
+          </div>
+          <div className="flex pt-6"></div>
+      </div>
+
+      {/* PROJECTS */}
+
+      <section id="projects" className="flex h-[500px]">
+
+      </section>
+
+      {/* SKILLS */}
+
+      <section id="skills" className="flex h-[500px]">
+
+      </section>
+
+      {/* CONTACT */}
+
+      <section id="contact" className="flex h-[500px]">
+
+      </section>
+
+      {/* DARK MODE */}
+
+      <ThemeToggle theme={theme} onThemeChange={setTheme} />
+
       <footer className="bg-white text-slate-500 px-16 py-4 inset-x-0 bottom-0 text-sm border-t border-slate-200">
         <p>&copy; {new Date().getFullYear()} Vincent Castro. All rights reserved.</p>
       </footer>
