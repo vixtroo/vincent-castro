@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck, faMoon, faSun} from "@fortawesome/free-solid-svg-icons";
+import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, faUsers } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -41,11 +41,11 @@ export default function Home() {
 
         {/* NAVBAR */}
         
-        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000">
+        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000 dark:bg-slate-900/40 dark:text-slate-100">
           <div>
-            <h1 className="text-5xl font-bold text-slate-950 ms-2">V<span className="text-blue-500">C.</span></h1>
+            <h1 className="text-5xl font-bold text-slate-950 ms-2 dark:text-slate-100">V<span className="text-blue-500">C.</span></h1>
           </div>
-          <div className="flex text-slate-950">
+          <div className="flex text-slate-950 dark:text-slate-100">
             <ul className="flex gap-16 font-semibold">
               <li><a href="#about">About</a></li>
               <li><a href="#projects">Projects</a></li>
@@ -57,7 +57,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ABOUT */}
+      {/* ABOUT SECTION*/}
 
       <section id="about" className="flex flex-col justify-center px-16 pt-38 gap-6 bg-slate-50">
         <div className="hero flex gap-12">
@@ -111,10 +111,44 @@ export default function Home() {
               <p className="text-sm text-slate-950 text-sm max-w-lg">I am a Frontend Developer with more than 2 years of professional experience building enterprise web and mobile applications. I specialize in React, Next.js, TypeScript, and Flutterflow, while also developing backend services with Node.js and Supabase. I enjoy creating clean, maintainable software that delivers real business value.</p>
             </div>
           </div>
-          <div className="flex pt-6"></div>
+          <div className="flex text-center space-between w-1/2">
+
+            {/* Years of Experience */}
+
+            <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
+              <FontAwesomeIcon icon={faCalendarAlt} className="text-blue-500 text-3xl"/>
+              <h1 className="text-3xl text-slate-950 font-semibold mt-2">2+</h1>
+              <p className="text-sm text-slate-600">Years<br></br>Experience</p>
+            </div>
+
+            {/* Projects Completed */}
+
+            <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
+              <FontAwesomeIcon icon={faBoxesPacking} className="text-blue-500 text-3xl"/>
+              <h1 className="text-3xl text-slate-950 font-semibold mt-2">5+</h1>
+              <p className="text-sm text-slate-600">Projects<br></br>Completed</p>
+            </div>
+
+            {/* Technologies Used */}
+
+            <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
+              <FontAwesomeIcon icon={faCode} className="text-blue-500 text-3xl"/>
+              <h1 className="text-3xl text-slate-950 font-semibold mt-2">10+</h1>
+              <p className="text-sm text-slate-600">Technologies<br></br>Used</p>
+            </div>
+
+            {/* Users Impacted */}
+
+            <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
+              <FontAwesomeIcon icon={faUsers} className="text-blue-500 text-3xl"/>
+              <h1 className="text-3xl text-slate-950 font-semibold mt-2">100+</h1>
+              <p className="text-sm text-slate-600">Users<br></br>Impacted</p>
+            </div>
+            
+          </div>
       </div>
 
-      {/* PROJECTS */}
+      {/* PROJECTS SECTION */}
 
       <section id="projects" className="flex h-[500px]">
 
@@ -126,13 +160,13 @@ export default function Home() {
 
       </section>
 
-      {/* CONTACT */}
+      {/* CONTACT SECTION */}
 
       <section id="contact" className="flex h-[500px]">
 
       </section>
 
-      {/* DARK MODE */}
+      {/* DARK MODE TOGGLE */}
 
       <ThemeToggle theme={theme} onThemeChange={setTheme} />
 
