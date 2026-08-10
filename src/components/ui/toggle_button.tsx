@@ -46,7 +46,7 @@ export default function ThemeToggle({ theme, onThemeChange }: ThemeToggleProps) 
       className="fixed bottom-16 right-6 flex h-10 w-10 items-center justify-center rounded-full
                  text-gray-800 transition
                  bg-gray-100
-                 dark:text-yellow-300 dark:bg-gray-800 cursor-pointer shadow-lg -rotate-60 hover:-rotate-15"
+                 dark:text-yellow-300 dark:bg-gray-800 cursor-pointer shadow-lg -rotate-50 hover:-rotate-15"
       aria-label="Toggle dark mode"
     >
       <FontAwesomeIcon icon={isDark ? faSun : faMoon} />

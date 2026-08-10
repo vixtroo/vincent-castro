@@ -1,11 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, faUsers } from "@fortawesome/free-solid-svg-icons";
+import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, faUsers, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ThemeToggle from "@/components/ui/toggle_button";
+import scrollToSection from "@/lib/utils";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -36,7 +37,7 @@ export default function Home() {
   ]
 
   return (
-    <main className="flex min-h-screen flex-col bg-white text-slate-100 dark:bg-slate-950 dark:text-slate-100">
+    <main className="flex min-h-screen flex-col bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-100 items-center">
       <div className="flex flex-col items-center">
 
         {/* NAVBAR */}
@@ -59,7 +60,7 @@ export default function Home() {
 
       {/* ABOUT SECTION*/}
 
-      <section id="about" className="flex flex-col justify-center px-16 pt-38 gap-6 bg-slate-50 dark:bg-slate-900">
+      <section id="about" className="flex flex-col justify-center px-16 pt-38 gap-6 bg-slate-50 dark:bg-slate-900 w-full">
         <div className="hero flex gap-12">
           <div className="flex flex-col gap-4 max-w-xl z-10">
             <div className="px-3 py-2 bg-blue-50 rounded-3xl w-32 dark:bg-blue-900 dark:text-blue-300">
@@ -69,7 +70,7 @@ export default function Home() {
             <h1 className="text-3xl font-semibold text-slate-950 dark:text-slate-400">Frontend Developer building scalable web and mobile applications with modern technologies.</h1>
             <p className="text-md text-slate-600 dark:text-slate-400">I build responsive, production-ready web and mobile applications focused on performance, clean architecture, and exceptional user experience. With experience developing enterprise systems and cross-platform applications, I enjoy transforming complex business requirements into intuitive digital products.</p>
             <div className="flex gap-6 mt-4">
-              <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600">View My Projects <FontAwesomeIcon icon={faArrowRight}/></Button>
+              <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600" onClick={() => {scrollToSection('projects')}}>View My Projects <FontAwesomeIcon icon={faArrowRight}/></Button>
               <Button variant="outline" size="default" className="border-slate-200 text-slate-950 dark:text-slate-100 dark:bg-slate-800 dark:border-slate-600">Download Resume <FontAwesomeIcon icon={faCloudDownload}/></Button>
             </div>
           </div>
@@ -88,14 +89,14 @@ export default function Home() {
             </ul>
             <div className="flex bg-slate-100 px-3 py-2 rounded-2xl text-xs text-slate-950 w-fit mb-1 dark:bg-slate-600 dark:text-slate-300">{currentlyBuilding.stack}</div>
           </div>
-          <div className="absolute right-0">
+          <div className="absolute right-0 animate-float">
             <Image src="/assets/laptop_display.png" alt="Vincent Castro" width={800} height={500}/>
           </div>
         </div>
         <div className="flex max-w-3xl gap-4 flex-wrap mt-4 mb-6">
           {skills.map((skill, index) =>(
             <div key={index} className="flex w-fit rounded-lg bg-white border border-slate-200 gap-2 p-3 shadow-sm dark:bg-slate-800 dark:border-slate-600">
-              <Image src={skill.icon} alt={skill.name} width={20} height={20}/>
+              <Image src={skill.icon} alt={skill.name} width={20} height={20} className="rounded-sm"/>
               <p className="text-sm text-slate-950 dark:text-slate-100">{skill.name}</p>
             </div>
           ))}
@@ -157,7 +158,7 @@ export default function Home() {
       {/* SKILLS */}
 
       <section id="skills" className="flex h-[500px]">
-
+        <h1 className="text-2xl text-blue-500 font-bold">SKILLS</h1>
       </section>
 
       {/* CONTACT SECTION */}
@@ -170,8 +171,19 @@ export default function Home() {
 
       <ThemeToggle theme={theme} onThemeChange={setTheme} />
 
-      <footer className="bg-white text-slate-500 px-16 py-4 inset-x-0 bottom-0 text-sm border-t border-slate-200 dark:text-slate-400 dark:bg-slate-900 dark:border-slate-700">
+      <footer className="flex justify-between items-center bg-white text-slate-500 px-16 py-4 inset-x-0 bottom-0 text-sm border-t border-slate-200 dark:text-slate-400 dark:bg-slate-900 dark:border-slate-700 w-full">
         <p>&copy; {new Date().getFullYear()} Vincent Castro. All rights reserved.</p>
+        <div className="flex gap-6 items-center">
+          <a href="https://github.com/vixtroo" target="_blank" rel="noopener noreferrer">
+            <Image src="/assets/GitHub.png" alt="GitHub" width={30} height={30} className="dark:invert"/>
+          </a>
+          <a href="https://www.linkedin.com/in/vpmcastro" target="_blank" rel="noopener noreferrer">
+            <Image src="/assets/LinkedIn.png" alt="LinkedIn" width={30} height={30}/>
+          </a>
+          <a href="#" className="flex items-center border border-slate-200 text-md px-2 py-[10px] rounded-full dark:border-slate-700 dark:text-slate-100">
+            <FontAwesomeIcon icon={faArrowUp}/>
+          </a>
+        </div>
       </footer>
     </main>
   );
