@@ -1,7 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, faUsers, faArrowUp, faDesktopAlt, faCodePullRequest, faDatabase, faTools } from "@fortawesome/free-solid-svg-icons";
+import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, 
+        faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, 
+        faUsers, faArrowUp, faDesktopAlt, faCodePullRequest, 
+        faDatabase, faTools, faEnvelope, faPhone, faMapLocation } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -264,10 +267,34 @@ export default function Home() {
 
       {/* CONTACT SECTION */}
 
-      <section id="contact" className="flex flex-col items-center gap-2 h-[500px]">
+      <section id="contact" className="flex flex-col items-center gap-2 w-full px-16 pb-8">
         <h1 className="text-md tracking-wider text-blue-500 font-bold">CONTACT</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Let's Work Together</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">I'm always open to discussing new opportunities and interesting projects.</p>
+        <div className="flex w-full pl-6">
+          <div className="flex flex-col gap-4">
+            <div className="flex gap-2 items-center">
+              <FontAwesomeIcon icon={faEnvelope} className="text-xl text-blue-500"/>
+              <p className="text-sm">vincentxpatrick@gmail.com</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <FontAwesomeIcon icon={faPhone} className="text-xl text-blue-500"/>
+              <p className="text-sm">0967-296-0756</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <FontAwesomeIcon icon={faMapLocation} className="text-xl text-blue-500"/>
+              <p className="text-sm">Quezon City, Philippines</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <Image src="/assets/GitHub.png" alt="GitHub" width={24} height={24} className="dark:invert"/>
+              <p className="text-sm">github.com/vixtroo</p>
+            </div>
+            <div className="flex gap-2 items-center">
+              <Image src="/assets/LinkedIn.png" alt="GitHub" width={24} height={24}/>
+              <p className="text-sm">linkedin.com/in/vpmcastro</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* DARK MODE TOGGLE */}
