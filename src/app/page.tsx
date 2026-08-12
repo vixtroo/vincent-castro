@@ -80,10 +80,10 @@ export default function Home() {
 
         {/* NAVBAR */}
         
-        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000 dark:bg-slate-900/40 dark:text-slate-100">
+        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000 dark:bg-slate-900/40">
           <a href="#">
             <div>
-              <h1 className="text-5xl font-bold ms-2">V<span className="text-blue-500">C.</span></h1>
+              <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold ms-2">V<span className="text-blue-500">C.</span></h1>
             </div>
           </a>
           <div className="flex">
@@ -344,7 +344,7 @@ export default function Home() {
           <a href="https://www.linkedin.com/in/vpmcastro" target="_blank" rel="noopener noreferrer">
             <Image src="/assets/LinkedIn.png" alt="LinkedIn" width={30} height={30}/>
           </a>
-          <a href="#" className="flex items-center border border-slate-200 text-md px-2 py-[10px] rounded-full dark:border-slate-700 dark:text-slate-100">
+          <a href="#" className="flex items-center border border-slate-200 text-md px-2 py-[10px] rounded-full dark:border-slate-700">
             <FontAwesomeIcon icon={faArrowUp}/>
           </a>
         </div>
