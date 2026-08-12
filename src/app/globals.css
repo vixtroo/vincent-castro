@@ -22,6 +22,7 @@
 
 @theme{
   --animate-float: float 3s ease-in-out infinite;
+  --animate-revolve: revolve 3s linear infinite;
 
   @keyframes float {
     0%,
@@ -31,6 +32,36 @@
     50% {
       transform: translateY(10px);
     }
+  }
+
+  @keyframes revolve {
+    0% {
+    transform: translate(0, -10px);
+  }
+  12.5% {
+    transform: translate(7px, -7px);
+  }
+  25% {
+    transform: translate(10px, 0);
+  }
+  37.5% {
+    transform: translate(7px, 7px);
+  }
+  50% {
+    transform: translate(0, 10px);
+  }
+  62.5% {
+    transform: translate(-7px, 7px);
+  }
+  75% {
+    transform: translate(-10px, 0);
+  }
+  87.5% {
+    transform: translate(-7px, -7px);
+  }
+  100% {
+    transform: translate(0, -10px);
+  }
   }
 }
 

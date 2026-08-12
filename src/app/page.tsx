@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, 
         faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, 
         faUsers, faArrowUp, faDesktopAlt, faCodePullRequest, 
-        faDatabase, faTools, faEnvelope, faPhone, faMapLocation } from "@fortawesome/free-solid-svg-icons";
+        faDatabase, faTools, faEnvelope, faPhone, faMapLocation,
+        faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
@@ -80,9 +81,11 @@ export default function Home() {
         {/* NAVBAR */}
         
         <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000 dark:bg-slate-900/40 dark:text-slate-100">
-          <div>
-            <h1 className="text-5xl font-bold ms-2">V<span className="text-blue-500">C.</span></h1>
-          </div>
+          <a href="#">
+            <div>
+              <h1 className="text-5xl font-bold ms-2">V<span className="text-blue-500">C.</span></h1>
+            </div>
+          </a>
           <div className="flex">
             <ul className="flex gap-16 font-semibold">
               <li><a href="#about">About</a></li>
@@ -127,7 +130,7 @@ export default function Home() {
             <div className="flex bg-slate-100 px-3 py-2 rounded-2xl text-xs w-fit mb-1 dark:bg-slate-600">{currentlyBuilding.stack}</div>
           </div>
           <div className="absolute right-0 animate-float">
-            <Image src="/assets/laptop_display.png" alt="Vincent Castro" width={800} height={500}/>
+            <Image src="/assets/laptop_display.png" alt="Image" width={800} height={500}/>
           </div>
         </div>
         <div className="flex max-w-3xl gap-4 flex-wrap mt-4 mb-6">
@@ -142,7 +145,7 @@ export default function Home() {
       <div className="flex items-start px-16 py-8">
           <div className="flex gap-6 w-1/2">
             <div className="flex-shrink-0">
-              <Image src={theme === "dark" ? "/assets/teng_dark.png" : "/assets/teng_light.JPG"} alt="Vincent Castro" width={100} height={120} className="rounded-lg"/>
+              <Image src={theme === "dark" ? "/assets/teng_dark.png" : "/assets/teng_light.JPG"} alt="Vincent Castro" width={100} height={120} className="rounded-lg shadow-lg"/>
             </div>
             <div className="flex flex-col gap-2">
               <h1 className="text-md text-blue-500 font-semibold">ABOUT ME</h1>
@@ -151,7 +154,7 @@ export default function Home() {
           </div>
           <div className="flex text-center space-between w-1/2">
 
-            {/* Years of Experience */}
+            {/* YEARS OF EXPERIENCE */}
 
             <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
               <FontAwesomeIcon icon={faCalendarAlt} className="text-blue-500 text-3xl"/>
@@ -159,7 +162,7 @@ export default function Home() {
               <p className="text-sm text-slate-600 dark:text-slate-400">Years<br></br>Experience</p>
             </div>
 
-            {/* Projects Completed */}
+            {/* PROJECTS COMPLETED */}
 
             <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
               <FontAwesomeIcon icon={faBoxesPacking} className="text-blue-500 text-3xl"/>
@@ -167,7 +170,7 @@ export default function Home() {
               <p className="text-sm text-slate-600 dark:text-slate-400">Projects<br></br>Completed</p>
             </div>
 
-            {/* Technologies Used */}
+            {/* TECHNOLOGIES USED */}
 
             <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
               <FontAwesomeIcon icon={faCode} className="text-blue-500 text-3xl"/>
@@ -175,7 +178,7 @@ export default function Home() {
               <p className="text-sm text-slate-600 dark:text-slate-400">Technologies<br></br>Used</p>
             </div>
 
-            {/* Users Impacted */}
+            {/* USERS IMPACTED */}
 
             <div className="flex flex-col items-center gap-2 px-12 py-4 border-l border-slate-200">
               <FontAwesomeIcon icon={faUsers} className="text-blue-500 text-3xl"/>
@@ -188,7 +191,7 @@ export default function Home() {
 
       {/* PROJECTS SECTION */}
 
-      <section id="projects" className="flex flex-col items-center gap-2 px-16 pb-8 w-full h-[500px]">
+      <section id="projects" className="flex flex-col items-center gap-2 px-16 w-full h-[500px]">
         <h1 className="text-md tracking-wider text-blue-500 font-bold">PROJECTS</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Featured Projects</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">A selection of applications I've built and contributed to.</p>
@@ -202,9 +205,9 @@ export default function Home() {
         <p className="text-md text-slate-600 dark:text-slate-400">Technologies I use to build high-quality applications.</p>
         <div className="flex gap-4 w-full">
 
-          {/* Frontend */}
+          {/* FRONTEND */}
 
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4">
+          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faDesktopAlt} className="text-4xl text-blue-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Frontend</h2>
@@ -218,9 +221,9 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* Backend */}
+          {/* BACKEND */}
 
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4">
+          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faCodePullRequest} className="text-4xl text-green-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Backend</h2>
@@ -234,9 +237,9 @@ export default function Home() {
             </ul>
           </div>
 
-          {/* Database */}
+          {/* DATABASE */}
 
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4">
+          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faDatabase} className="text-4xl text-violet-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Database</h2>
@@ -249,7 +252,10 @@ export default function Home() {
               ))}
             </ul>
           </div>
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4">
+          
+          {/* TOOLS AND OTHERS */}
+          
+          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faTools} className="text-4xl text-orange-300" />
               <h2 className="text-md font-semibold dark:text-slate-400">Tools & Others</h2>
@@ -270,9 +276,12 @@ export default function Home() {
       <section id="contact" className="flex flex-col items-center gap-2 w-full px-16 pb-8">
         <h1 className="text-md tracking-wider text-blue-500 font-bold">CONTACT</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Let's Work Together</h1>
-        <p className="text-md text-slate-600 dark:text-slate-400">I'm always open to discussing new opportunities and interesting projects.</p>
-        <div className="flex w-full pl-6">
-          <div className="flex flex-col gap-4">
+        <p className="text-md text-slate-600 dark:text-slate-400">I'm always open to discussing new opportunities and interesting projects.</p>     
+        <div className="flex w-full pl-6 dark:text-slate-400">
+
+          {/* INFO */}
+
+          <div className="flex flex-col gap-4 w-1/4">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faEnvelope} className="text-xl text-blue-500"/>
               <p className="text-sm">vincentxpatrick@gmail.com</p>
@@ -293,6 +302,31 @@ export default function Home() {
               <Image src="/assets/LinkedIn.png" alt="GitHub" width={24} height={24}/>
               <p className="text-sm">linkedin.com/in/vpmcastro</p>
             </div>
+          </div>
+          
+          {/* CONTACT FORM */}
+
+          <div className="flex w-1/2 border border-slate-200 rounded-lg dark:border-slate-600 p-6 shadow-lg">
+            <form method="post" className="flex flex-col w-full gap-3">
+              <div className="flex gap-6">
+                <div className="flex flex-col gap-1 text-sm w-full">
+                  <label htmlFor="name" className="font-semibold">Name</label>
+                  <input id="name" type="text" placeholder="Your name" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" required/>
+                </div>
+                <div className="flex flex-col gap-1 text-sm w-full">
+                  <label htmlFor="email" className="font-semibold">Email</label>
+                  <input id="email" type="text" placeholder="your.email@example.com" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" required/>
+                </div>
+              </div>
+              <div className="flex flex-col text-sm gap-1">
+                <label htmlFor="message" className="font-semibold">Message</label>
+                <textarea id="message" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" placeholder="Tell me about your project/company" required></textarea>
+              </div>
+              <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600">Send Message <FontAwesomeIcon icon={faPaperPlane}/></Button>
+            </form>
+          </div>
+          <div className="flex w-1/4 items-start justify-center animate-revolve">
+            <Image src="/assets/display_2.png" alt="Image" height={250} width={250} />
           </div>
         </div>
       </section>
