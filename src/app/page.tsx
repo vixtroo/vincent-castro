@@ -11,7 +11,6 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ThemeToggle from "@/components/ui/toggle_button";
 import scrollToSection from "@/lib/utils";
-import emailjs from "@emailjs/browser";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -92,18 +91,17 @@ export default function Home() {
     e.preventDefault();
 
     try {
-      const templateParams = {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-      };
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
 
-      await emailjs.send(
-        "service_22zqtu6",
-        "template_40bclqq",
-        templateParams,
-        "K-d0fTm-8nMbhsvvZ"
-      );
+      if (!response.ok) {
+        throw new Error("Failed to send email");
+      }
 
       console.log("Email sent successfully");
       alert("Email sent successfully");
