@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent, FormEvent } from "react";
 import {faKey, faArrowRight, faCloudDownload, faBarsStaggered, 
         faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, 
         faUsers, faArrowUp, faDesktopAlt, faCodePullRequest, 
@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import ThemeToggle from "@/components/ui/toggle_button";
 import scrollToSection from "@/lib/utils";
+import emailjs from "@emailjs/browser";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -73,6 +74,49 @@ export default function Home() {
       "GitHub Copilot"
     ]
   }
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.id]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    try {
+      const templateParams = {
+        name: formData.name,
+        email: formData.email,
+        message: formData.message,
+      };
+
+      await emailjs.send(
+        "service_22zqtu6",
+        "template_40bclqq",
+        templateParams,
+        "K-d0fTm-8nMbhsvvZ"
+      );
+
+      console.log("Email sent successfully");
+      alert("Email sent successfully");
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.error("Error sending email", error);
+      alert("Error sending email");
+    }
+  };
 
   return (
     <main className="flex min-h-screen flex-col bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-100 items-center">
@@ -307,22 +351,22 @@ export default function Home() {
           {/* CONTACT FORM */}
 
           <div className="flex w-1/2 border border-slate-200 rounded-lg dark:border-slate-600 p-6 shadow-lg">
-            <form method="post" className="flex flex-col w-full gap-3">
+            <form onSubmit={handleSubmit} className="flex flex-col w-full gap-3">
               <div className="flex gap-6">
-                <div className="flex flex-col gap-1 text-sm w-full">
+                <div className="flex flex-col gap-1 text-sm w-1/2">
                   <label htmlFor="name" className="font-semibold">Name</label>
-                  <input id="name" type="text" placeholder="Your name" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" required/>
+                  <input id="name" type="text" placeholder="Your name" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600 w-full" required onChange={handleChange} value={formData.name}/>
                 </div>
-                <div className="flex flex-col gap-1 text-sm w-full">
+                <div className="flex flex-col gap-1 text-sm w-1/2">
                   <label htmlFor="email" className="font-semibold">Email</label>
-                  <input id="email" type="text" placeholder="your.email@example.com" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" required/>
+                  <input id="email" type="text" placeholder="your.email@example.com" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600 w-full" required onChange={handleChange} value={formData.email}/>
                 </div>
               </div>
               <div className="flex flex-col text-sm gap-1">
                 <label htmlFor="message" className="font-semibold">Message</label>
-                <textarea id="message" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" placeholder="Tell me about your project/company" required></textarea>
+                <textarea id="message" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" placeholder="Tell me about your project/company" required value={formData.message} onChange={handleChange}></textarea>
               </div>
-              <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600">Send Message <FontAwesomeIcon icon={faPaperPlane}/></Button>
+              <Button type="submit" variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600">Send Message <FontAwesomeIcon icon={faPaperPlane}/></Button>
             </form>
           </div>
           <div className="flex w-1/4 items-start justify-center animate-revolve">
