@@ -129,14 +129,14 @@ export default function Home() {
             </div>
           </a>
           <div className="flex">
-            <ul className="flex gap-16 font-semibold">
-              <li><a href="#about">About</a></li>
-              <li><a href="#projects">Projects</a></li>
-              <li><a href="#skills">Skills</a></li>
-              <li><a href="#contact">Contact</a></li>
+            <ul className="flex gap-4 font-semibold">
+              <li><a href="#about" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">About</a></li>
+              <li><a href="#projects" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Projects</a></li>
+              <li><a href="#skills" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Skills</a></li>
+              <li><a href="#contact" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Contact</a></li>
             </ul>
           </div>
-          <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600"><FontAwesomeIcon icon={faKey}/>Login</Button>
+          <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600"><FontAwesomeIcon icon={faKey}/>Login</Button>
         </div>
       </div>
 
@@ -148,11 +148,11 @@ export default function Home() {
             <div className="px-3 py-2 bg-blue-50 rounded-3xl w-32 dark:bg-blue-900 dark:text-blue-300">
               <h1 className="text-md font-bold text-blue-500">👋 Hello, I'm</h1>
             </div>
-            <h1 className="text-7xl font-bold">Vincent <span className="text-blue-500">Castro</span></h1>
+            <h1 className="text-7xl font-bold">Vincent <span className="text-blue-500 dark:text-blue-600">Castro</span></h1>
             <h1 className="text-3xl font-semibold dark:text-slate-400">Frontend Developer building scalable web and mobile applications with modern technologies.</h1>
             <p className="text-md text-slate-600 dark:text-slate-400">I build responsive, production-ready web and mobile applications focused on performance, clean architecture, and exceptional user experience. With experience developing enterprise systems and cross-platform applications, I enjoy transforming complex business requirements into intuitive digital products.</p>
             <div className="flex gap-6 mt-4">
-              <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600" onClick={() => {scrollToSection('projects')}}>View My Projects <FontAwesomeIcon icon={faArrowRight}/></Button>
+              <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600" onClick={() => {scrollToSection('projects')}}>View My Projects <FontAwesomeIcon icon={faArrowRight}/></Button>
               <Button variant="outline" size="default" className="border-slate-200 dark:bg-slate-800 dark:border-slate-600">Download Resume <FontAwesomeIcon icon={faCloudDownload}/></Button>
             </div>
           </div>
@@ -364,7 +364,7 @@ export default function Home() {
                 <label htmlFor="message" className="font-semibold">Message</label>
                 <textarea id="message" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" placeholder="Tell me about your project/company" required value={formData.message} onChange={handleChange}></textarea>
               </div>
-              <Button type="submit" variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600">Send Message <FontAwesomeIcon icon={faPaperPlane}/></Button>
+              <Button type="submit" variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600">Send Message <FontAwesomeIcon icon={faPaperPlane}/></Button>
             </form>
           </div>
           <div className="flex w-1/4 items-start justify-center animate-revolve">
