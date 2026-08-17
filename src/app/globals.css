@@ -75,4 +75,5 @@ body {
   box-sizing: border-box;
   scroll-behavior: smooth;
   transition: 0.3s ease-in-out;
+  scroll-padding: 110px; 
 }
