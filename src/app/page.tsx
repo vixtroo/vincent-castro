@@ -125,7 +125,7 @@ export default function Home() {
         <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000 dark:bg-slate-900/40">
           <a href="#">
             <div>
-              <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold ms-2">V<span className="text-blue-500">C.</span></h1>
+              <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold ms-2">V<span className="text-blue-500 text-blue-500 dark:text-blue-600">C.</span></h1>
             </div>
           </a>
           <div className="flex">
