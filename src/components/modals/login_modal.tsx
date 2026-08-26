@@ -105,7 +105,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
 
       <div
         ref={modalRef}
-        className={`relative w-full max-w-[420px] mx-4 bg-white rounded-lg shadow-lg overflow-hidden transition-all duration-500 transform ${
+        className={`relative w-full max-w-[420px] mx-4 bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden transition-all duration-500 transform ${
           isAnimating
             ? 'scale-100 opacity-100'
             : 'scale-95 opacity-0 pointer-events-none'
