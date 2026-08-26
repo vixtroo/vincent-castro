@@ -12,6 +12,7 @@ import { LoginModal } from "@/components/modals/login_modal";
 import Image from "next/image";
 import ThemeToggle from "@/components/buttons/toggle_button";
 import scrollToSection from "@/lib/utils";
+import { ProjectsCard } from "@/components/cards/projects_card";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -266,10 +267,24 @@ export default function Home() {
 
       {/* PROJECTS SECTION */}
 
-      <section id="projects" className="flex flex-col items-center gap-2 px-16 w-full h-[500px]">
+      <section id="projects" className="flex flex-col items-center gap-2 px-16 w-full pb-8">
         <h1 className="text-md tracking-wider text-blue-500 font-bold">PROJECTS</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Featured Projects</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">A selection of applications I've built and contributed to.</p>
+        <div className="flex gap-4 w-full">
+          <ProjectsCard
+            image_url="/project1.jpg"
+            project_name="Project 1"
+            description="A brief description of Project 1."
+            tech_stack={["React", "TypeScript", "Tailwind CSS"]}
+          />
+          <ProjectsCard
+            image_url="/project2.jpg"
+            project_name="Project 2"
+            description="A brief description of Project 2."
+            tech_stack={["Node.js", "Express", "MongoDB"]}
+          />
+        </div>
       </section>
 
       {/* SKILLS SECTIONS */}
