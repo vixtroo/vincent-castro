@@ -7,13 +7,15 @@ import {faKey, faArrowRight, faCloudDownload, faBarsStaggered,
         faDatabase, faTools, faEnvelope, faPhone, faMapLocation,
         faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/buttons/button";
+import { LoginModal } from "@/components/modals/login_modal";
 import Image from "next/image";
-import ThemeToggle from "@/components/ui/toggle_button";
+import ThemeToggle from "@/components/buttons/toggle_button";
 import scrollToSection from "@/lib/utils";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -21,6 +23,37 @@ export default function Home() {
       setTheme("dark");
     }
   }, []);
+
+  const handleLogin = async (credentials: {
+    username: string;
+    password: string;
+  }) => {
+    try {
+      const response = await fetch("/api/authenticate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credentials),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.message || "Invalid credentials");
+      }
+
+      const data = await response.json();
+      // Store auth token if needed
+      localStorage.setItem("authToken", data.token);
+      setIsLoginOpen(false);
+      alert("Login successful");
+      // Redirect to dashboard or update app state as needed
+    } catch (error) {
+      throw new Error(
+        error instanceof Error ? error.message : "Login failed"
+      );
+    }
+  };
 
   const currentlyBuilding = {
     "title": "CEO Dashboard",
@@ -136,7 +169,7 @@ export default function Home() {
               <li><a href="#contact" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Contact</a></li>
             </ul>
           </div>
-          <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600"><FontAwesomeIcon icon={faKey}/>Login</Button>
+          <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600" onClick={() => setIsLoginOpen(true)}><FontAwesomeIcon icon={faKey}/>Login</Button>
         </div>
       </div>
 
@@ -324,24 +357,24 @@ export default function Home() {
           {/* INFO */}
 
           <div className="flex flex-col gap-4 w-1/4">
-            <div className="flex gap-2 items-center">
-              <FontAwesomeIcon icon={faEnvelope} className="text-xl text-blue-500"/>
+            <div className="flex gap-6 items-center">
+              <FontAwesomeIcon icon={faEnvelope} className="text-2xl text-blue-500"/>
               <p className="text-sm">vincentxpatrick@gmail.com</p>
             </div>
-            <div className="flex gap-2 items-center">
-              <FontAwesomeIcon icon={faPhone} className="text-xl text-blue-500"/>
+            <div className="flex gap-6 items-center">
+              <FontAwesomeIcon icon={faPhone} className="text-2xl text-blue-500"/>
               <p className="text-sm">0967-296-0756</p>
             </div>
-            <div className="flex gap-2 items-center">
-              <FontAwesomeIcon icon={faMapLocation} className="text-xl text-blue-500"/>
+            <div className="flex gap-6 items-center">
+              <FontAwesomeIcon icon={faMapLocation} className="text-2xl text-blue-500"/>
               <p className="text-sm">Quezon City, Philippines</p>
             </div>
-            <div className="flex gap-2 items-center">
-              <Image src="/assets/GitHub.png" alt="GitHub" width={24} height={24} className="dark:invert"/>
+            <div className="flex gap-6 items-center">
+              <Image src="/assets/GitHub.png" alt="GitHub" width={30} height={30} className="dark:invert"/>
               <p className="text-sm">github.com/vixtroo</p>
             </div>
-            <div className="flex gap-2 items-center">
-              <Image src="/assets/LinkedIn.png" alt="GitHub" width={24} height={24}/>
+            <div className="flex gap-6 items-center">
+              <Image src="/assets/LinkedIn.png" alt="GitHub" width={30} height={30}/>
               <p className="text-sm">linkedin.com/in/vpmcastro</p>
             </div>
           </div>
@@ -368,7 +401,7 @@ export default function Home() {
             </form>
           </div>
           <div className="flex w-1/4 items-start justify-center animate-revolve">
-            <Image src="/assets/display_2.png" alt="Image" height={250} width={250} />
+            <Image src="/assets/display_2.png" alt="Image" height={300} width={300} />
           </div>
         </div>
       </section>
@@ -376,6 +409,13 @@ export default function Home() {
       {/* DARK MODE TOGGLE */}
 
       <ThemeToggle theme={theme} onThemeChange={setTheme} />
+
+      {/* LOGIN MODAL */}
+      <LoginModal
+        isOpen={isLoginOpen}
+        onClose={() => setIsLoginOpen(false)}
+        onSubmit={handleLogin}
+      />
 
       <footer className="flex justify-between items-center bg-white text-slate-500 px-16 py-4 inset-x-0 bottom-0 text-sm border-t border-slate-200 dark:text-slate-400 dark:bg-slate-900 dark:border-slate-700 w-full">
         <p>&copy; {new Date().getFullYear()} Vincent Castro. All rights reserved.</p>
