@@ -2,13 +2,13 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash, faTimes, faCode } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faEyeSlash, faTimes, faCode, faWarning } from '@fortawesome/free-solid-svg-icons';
 import { Button } from '@/components/buttons/button';
 
 interface LoginModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (credentials: { username: string; password: string }) => Promise<void>;
+  onSubmit: (credentials: { email: string; password: string }) => Promise<void>;
 }
 
 export const LoginModal: React.FC<LoginModalProps> = ({
@@ -16,7 +16,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   onClose,
   onSubmit,
 }) => {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -44,15 +44,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     e.preventDefault();
     setError('');
 
-    if (!username.trim() || !password.trim()) {
-      setError('Please enter both username and password');
+    if (!email.trim() || !password.trim()) {
+      setError('Please enter both email and password');
       return;
     }
 
     setLoading(true);
     try {
-      await onSubmit({ username, password });
-      setUsername('');
+      await onSubmit({ email, password });
+      setEmail('');
       setPassword('');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Invalid credentials');
@@ -142,7 +142,8 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           {/* ERROR MESSAGE */}
 
           {error && (
-            <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded-lg">
+            <div className="flex mb-6 p-3 bg-red-50 border border-red-200 rounded-lg items-center">
+              <FontAwesomeIcon icon={faWarning} className='text-red-700 mr-2'/>
               <p className="text-red-700 text-sm">{error}</p>
             </div>
           )}
@@ -152,17 +153,17 @@ export const LoginModal: React.FC<LoginModalProps> = ({
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
               <label
-                htmlFor="username"
+                htmlFor="email"
                 className="block text-sm font-medium mb-2"
               >
-                Username
+                Email
               </label>
               <input
-                id="username"
-                type="text"
-                placeholder="Enter your username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                id="email"
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 disabled={loading}
                 className="w-full px-3 py-2 border border-slate-200 outline-none rounded-lg placeholder-slate-400 disabled:bg-slate-50 disabled:text-slate-500 dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600"
               />
