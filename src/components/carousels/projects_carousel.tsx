@@ -41,7 +41,7 @@ export function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   return (
     <div className="w-full">
       <div className="relative px-12 sm:px-14">
-        <div className="overflow-hidden py-2">
+        <div className="overflow-hidden py-6">
           <div
             className="flex transition-transform duration-500 ease-out"
             style={{ transform: `translateX(-${currentPage * 100}%)` }}
@@ -65,7 +65,7 @@ export function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           title="Previous projects"
           onClick={() => setPage((currentPage) => Math.max(currentPage - 1, 0))}
           disabled={currentPage === 0}
-          className="absolute left-0 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-blue-500 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:text-blue-400"
+          className="absolute left-0 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-blue-500 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:text-blue-400 cursor-pointer"
         >
           <FontAwesomeIcon icon={faChevronLeft} />
         </button>
@@ -75,7 +75,7 @@ export function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           title="Next projects"
           onClick={() => setPage((currentPage) => Math.min(currentPage + 1, pageCount - 1))}
           disabled={currentPage === pageCount - 1}
-          className="absolute right-0 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-blue-500 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:text-blue-400"
+          className="absolute right-0 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-700 shadow-sm transition hover:border-blue-500 hover:text-blue-500 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300 dark:hover:border-blue-500 dark:hover:text-blue-400 cursor-pointer"
         >
           <FontAwesomeIcon icon={faChevronRight} />
         </button>

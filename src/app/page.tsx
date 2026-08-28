@@ -212,7 +212,7 @@ export default function Home() {
         </div>
         <div className="flex max-w-3xl gap-4 flex-wrap mt-4 mb-6">
           {skills.map((skill, index) =>(
-            <div key={index} className="flex w-fit rounded-lg bg-white border border-slate-200 gap-2 p-3 shadow-sm dark:bg-slate-800 dark:border-slate-600">
+            <div key={index} className="flex w-fit rounded-lg bg-white border border-slate-200 gap-2 p-3 shadow-sm dark:bg-slate-800 dark:border-slate-600 hover:scale-105 transition duration-300">
               <Image src={skill.icon} alt={skill.name} width={20} height={20} className="rounded-sm"/>
               <p className="text-sm">{skill.name}</p>
             </div>
