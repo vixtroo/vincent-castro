@@ -57,11 +57,10 @@ export default function Home() {
     }
   };
 
-  const currentlyBuilding = {
-    "title": "CEO Dashboard",
-    "descriptions": ["Company Project Showcase", "Secure Authenticcation", "Project CRUD Management", "Modern & Responsive Interface"],
-    "stack": "PHP • CodeIgniter"
-  }
+  const currentlyBuilding = { 
+    "title": "Stradcom Middleware Web App", 
+    "descriptions": ["Payment Processing Management", "Transaction Monitoring", "Data Export", "RESTful Middleware Services"], 
+    "stack": "PHP • CodeIgniter"}
 
   const skills = [
     {"name": "React", "icon": "/assets/React.png"},
