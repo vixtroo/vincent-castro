@@ -14,6 +14,7 @@ import ThemeToggle from "@/components/buttons/toggle_button";
 import scrollToSection from "@/lib/utils";
 import { ProjectsCarousel } from "@/components/carousels/projects_carousel";
 import { projects } from "@/data/projects";
+import { getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -24,6 +25,16 @@ export default function Home() {
     if (savedTheme === "dark") {
       setTheme("dark");
     }
+  }, []);
+
+  const [currentlyBuilding, setCurrentlyBuilding] = useState<CurrentlyBuildingProject | null>(null);
+
+  useEffect(() => {
+    getCurrentlyBuildingProject()
+      .then(setCurrentlyBuilding)
+      .catch((error) => {
+        console.log("Error fetching currently building project", error);
+      });
   }, []);
 
   const handleLogin = async (credentials: {
@@ -56,11 +67,6 @@ export default function Home() {
       );
     }
   };
-
-  const currentlyBuilding = { 
-    "title": "Stradcom Middleware Web App", 
-    "descriptions": ["Payment Processing Management", "Transaction Monitoring", "Data Export", "RESTful Middleware Services"], 
-    "stack": "PHP • CodeIgniter"}
 
   const skills = [
     {"name": "React", "icon": "/assets/React.png"},
@@ -190,21 +196,23 @@ export default function Home() {
               <Button variant="outline" size="default" className="border-slate-200 dark:bg-slate-800 dark:border-slate-600">Download Resume <FontAwesomeIcon icon={faCloudDownload}/></Button>
             </div>
           </div>
-          <div className="flex flex-col gap-4 z-10 bg-white w-[224px] shadow-lg p-4 rounded-lg mt-16 h-fit dark:bg-slate-800">
-            <h1 className="text-md font-semibold text-blue-500">Currently Building</h1>
-            <div className="flex gap-2 text-lg items-center">
-              <div className="p-2 bg-blue-50 rounded-lg dark:bg-blue-900">
-                <FontAwesomeIcon icon={faBarsStaggered} className="text-blue-500 h-4 dark:text-blue-300"/>
+          {currentlyBuilding && (
+            <div className="flex flex-col gap-4 z-10 bg-white w-[224px] shadow-lg p-4 rounded-lg mt-16 h-fit dark:bg-slate-800">
+              <h1 className="text-md font-semibold text-blue-500">Currently Building</h1>
+              <div className="flex gap-2 text-lg items-center">
+                <div className="p-2 bg-blue-50 rounded-lg dark:bg-blue-900">
+                  <FontAwesomeIcon icon={faBarsStaggered} className="text-blue-500 h-4 dark:text-blue-300"/>
+                </div>
+                <h1 className="font-bold">{currentlyBuilding.project_name}</h1>
               </div>
-              <h1 className="font-bold">{currentlyBuilding.title}</h1>
+              <ul className="flex flex-col gap-4">
+                {(currentlyBuilding.features ?? []).map((feature, index) => (
+                  <li key={index} className="flex gap-2 text-sm"><FontAwesomeIcon icon={faCircleCheck} className="text-blue-500 h-4 mt-1"/>{feature}</li>
+                ))}
+              </ul>
+              <div className="flex bg-slate-100 px-3 py-2 rounded-2xl text-xs w-fit mb-1 dark:bg-slate-600">{currentlyBuilding.currently_building_stack}</div>
             </div>
-            <ul className="flex flex-col gap-4">
-              {currentlyBuilding.descriptions.map((description, index) => (
-                <li key={index} className="flex gap-2 text-sm"><FontAwesomeIcon icon={faCircleCheck} className="text-blue-500 h-4 mt-1"/>{description}</li>
-              ))}
-            </ul>
-            <div className="flex bg-slate-100 px-3 py-2 rounded-2xl text-xs w-fit mb-1 dark:bg-slate-600">{currentlyBuilding.stack}</div>
-          </div>
+          )}
           <div className="absolute right-0 animate-float">
             <Image src="/assets/laptop_display.png" alt="Image" width={800} height={500}/>
           </div>
