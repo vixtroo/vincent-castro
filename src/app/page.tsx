@@ -193,7 +193,11 @@ export default function Home() {
             <p className="text-md text-slate-600 dark:text-slate-400">I build responsive, production-ready web and mobile applications focused on performance, clean architecture, and exceptional user experience. With experience developing enterprise systems and cross-platform applications, I enjoy transforming complex business requirements into intuitive digital products.</p>
             <div className="flex gap-6 mt-4">
               <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600" onClick={() => {scrollToSection('projects')}}>View My Projects <FontAwesomeIcon icon={faArrowRight}/></Button>
-              <Button variant="outline" size="default" className="border-slate-200 dark:bg-slate-800 dark:border-slate-600">Download Resume <FontAwesomeIcon icon={faCloudDownload}/></Button>
+              <Button asChild variant="outline" size="default" className="border-slate-200 dark:bg-slate-800 dark:border-slate-600">
+                <a href="/assets/Vincent-Castro-Resume.pdf" download="Vincent-Castro-Resume.pdf">
+                  Download Resume <FontAwesomeIcon icon={faCloudDownload}/>
+                </a>
+              </Button>
             </div>
           </div>
           {currentlyBuilding && (
