@@ -11,11 +11,9 @@
   --font-inter: var(--font-inter);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -69,6 +67,94 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter);
+}
+
+html.theme-loading,
+html.theme-loading *,
+html.theme-loading *::before,
+html.theme-loading *::after {
+  transition: none !important;
+}
+
+.splash-screen {
+  background-image: radial-gradient(circle at 50% 45%, rgba(219, 234, 254, 0.55), transparent 34%),
+    linear-gradient(135deg, #f8fafc 0%, #ffffff 55%, #eff6ff 100%);
+}
+
+.dark .splash-screen {
+  background-image: radial-gradient(circle at 50% 45%, rgba(30, 64, 175, 0.16), transparent 34%),
+    linear-gradient(135deg, #0a0a0a 0%, #0f172a 100%);
+}
+
+.splash-shape {
+  position: absolute;
+  width: 22rem;
+  height: 22rem;
+  border: 1px solid rgba(59, 130, 246, 0.08);
+  border-radius: 9999px;
+}
+
+.splash-shape-one {
+  top: -11rem;
+  left: -8rem;
+}
+
+.splash-shape-two {
+  right: -10rem;
+  bottom: -13rem;
+  width: 28rem;
+  height: 28rem;
+  background: rgba(147, 197, 253, 0.08);
+}
+
+.dark .splash-shape {
+  border-color: rgba(59, 130, 246, 0.1);
+}
+
+.dark .splash-shape-two {
+  background: rgba(30, 64, 175, 0.08);
+}
+
+.splash-logo {
+  animation: splash-logo-in 700ms ease-out both;
+}
+
+.splash-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  animation: splash-dot-pulse 1.1s ease-in-out infinite;
+}
+
+.splash-dot:nth-child(2) {
+  animation-delay: 150ms;
+}
+
+.splash-dot:nth-child(3) {
+  animation-delay: 300ms;
+}
+
+@keyframes splash-logo-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94) translateY(0.35rem);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes splash-dot-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 * {

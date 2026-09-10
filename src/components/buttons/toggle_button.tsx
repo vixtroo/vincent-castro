@@ -13,8 +13,7 @@ export default function ThemeToggle({ theme, onThemeChange }: ThemeToggleProps) 
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const activeTheme = theme ?? savedTheme;
+    const activeTheme = theme ?? (document.documentElement.classList.contains("dark") ? "dark" : "light");
 
     if (activeTheme === "dark") {
       document.documentElement.classList.add("dark");

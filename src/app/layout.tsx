@@ -16,8 +16,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${inter.variable} h-full antialiased`}
+      className={`${inter.variable} ${inter.variable} h-full antialiased theme-loading`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(() => {
+              const root = document.documentElement;
+              const savedTheme = localStorage.getItem("theme");
+              const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+              const isDark = savedTheme === "dark" || (savedTheme !== "light" && prefersDark);
+
+              root.classList.toggle("dark", isDark);
+              root.classList.remove("theme-loading");
+            })();`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

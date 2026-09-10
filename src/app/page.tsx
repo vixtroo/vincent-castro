@@ -15,26 +15,35 @@ import scrollToSection from "@/lib/utils";
 import { ProjectsCarousel } from "@/components/carousels/projects_carousel";
 import { projects } from "@/data/projects";
 import { getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
+import { SplashScreen } from "@/components/splash/splash_screen";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isInitialDataLoading, setIsInitialDataLoading] = useState(true);
+  const [hasMetMinimumDisplayTime, setHasMetMinimumDisplayTime] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme === "dark") {
-      setTheme("dark");
-    }
+    setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
   }, []);
 
   const [currentlyBuilding, setCurrentlyBuilding] = useState<CurrentlyBuildingProject | null>(null);
+
+  useEffect(() => {
+    const minimumDisplayTimer = window.setTimeout(() => {
+      setHasMetMinimumDisplayTime(true);
+    }, 900);
+
+    return () => window.clearTimeout(minimumDisplayTimer);
+  }, []);
 
   useEffect(() => {
     getCurrentlyBuildingProject()
       .then(setCurrentlyBuilding)
       .catch((error) => {
         console.log("Error fetching currently building project", error);
-      });
+      })
+      .finally(() => setIsInitialDataLoading(false));
   }, []);
 
   const handleLogin = async (credentials: {
@@ -157,7 +166,9 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-100 items-center">
+    <>
+      <SplashScreen isVisible={isInitialDataLoading || !hasMetMinimumDisplayTime} />
+      <main className="flex min-h-screen flex-col bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-100 items-center">
       <div className="flex flex-col items-center">
 
         {/* NAVBAR */}
@@ -422,7 +433,7 @@ export default function Home() {
 
       {/* DARK MODE TOGGLE */}
 
-      <ThemeToggle theme={theme} onThemeChange={setTheme} />
+      <ThemeToggle onThemeChange={setTheme} />
 
       {/* LOGIN MODAL */}
       <LoginModal
@@ -445,6 +456,7 @@ export default function Home() {
           </a>
         </div>
       </footer>
-    </main>
+      </main>
+    </>
   );
 }
