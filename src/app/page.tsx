@@ -173,28 +173,31 @@ export default function Home() {
 
         {/* NAVBAR */}
         
-        <div className="flex fixed top-0 h-[72px] justify-between items-center w-[97%] bg-white/40 backdrop-blur-xl rounded-lg px-6 shadow-lg mt-6 z-1000 dark:bg-slate-900/40">
-          <a href="#">
-            <div>
-              <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold ms-2">V<span className="text-blue-500 text-blue-500 dark:text-blue-600">C.</span></h1>
+        <div className="fixed top-0 z-1000 mt-6 w-full px-6">
+          <div className="site-container flex h-[72px] items-center justify-between rounded-lg bg-white/40 !px-6 shadow-lg backdrop-blur-xl dark:bg-slate-900/40">
+            <a href="#">
+              <div>
+                <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold ms-2">V<span className="text-blue-500 text-blue-500 dark:text-blue-600">C.</span></h1>
+              </div>
+            </a>
+            <div className="flex">
+              <ul className="flex gap-4 font-semibold">
+                <li><a href="#about" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">About</a></li>
+                <li><a href="#projects" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Projects</a></li>
+                <li><a href="#skills" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Skills</a></li>
+                <li><a href="#contact" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Contact</a></li>
+              </ul>
             </div>
-          </a>
-          <div className="flex">
-            <ul className="flex gap-4 font-semibold">
-              <li><a href="#about" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">About</a></li>
-              <li><a href="#projects" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Projects</a></li>
-              <li><a href="#skills" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Skills</a></li>
-              <li><a href="#contact" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Contact</a></li>
-            </ul>
+            <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600" onClick={() => setIsLoginOpen(true)}><FontAwesomeIcon icon={faKey}/>Login</Button>
           </div>
-          <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600" onClick={() => setIsLoginOpen(true)}><FontAwesomeIcon icon={faKey}/>Login</Button>
         </div>
       </div>
 
       {/* ABOUT SECTION*/}
 
-      <section id="about" className="flex flex-col justify-center px-16 pt-38 gap-6 bg-slate-50 dark:bg-slate-900 w-full">
-        <div className="hero flex gap-12">
+      <section id="about" className="w-full bg-slate-50 dark:bg-slate-900">
+        <div className="site-container flex flex-col justify-center gap-6 pt-38">
+        <div className="hero relative flex gap-12">
           <div className="flex flex-col gap-4 max-w-xl z-10">
             <div className="px-3 py-2 bg-blue-50 rounded-3xl w-32 dark:bg-blue-900 dark:text-blue-300">
               <h1 className="text-md font-bold text-blue-500">👋 Hello, I'm</h1>
@@ -240,8 +243,9 @@ export default function Home() {
             </div>
           ))}
         </div>
+        </div>
       </section>
-      <div className="flex items-start px-16 py-8">
+      <div className="site-container flex items-start py-8">
           <div className="flex gap-6 w-1/2">
             <div className="flex-shrink-0">
               <Image src={theme === "dark" ? "/assets/teng_dark.png" : "/assets/teng_light.JPG"} alt="Vincent Castro" width={100} height={120} className="rounded-lg shadow-lg"/>
@@ -251,7 +255,7 @@ export default function Home() {
               <p className="text-sm text-sm max-w-lg dark:text-slate-400">I am a Frontend Developer with more than 2 years of professional experience building enterprise web and mobile applications. I specialize in React, Next.js, TypeScript, and Flutterflow, while also developing backend services with Node.js and Supabase. I enjoy creating clean, maintainable software that delivers real business value.</p>
             </div>
           </div>
-          <div className="flex text-center space-between w-1/2">
+          <div className="flex text-center justify-end w-1/2">
 
             {/* YEARS OF EXPERIENCE */}
 
@@ -290,7 +294,7 @@ export default function Home() {
 
       {/* PROJECTS SECTION */}
 
-      <section id="projects" className="flex flex-col items-center gap-2 px-16 w-full pb-8">
+      <section id="projects" className="site-container flex flex-col items-center gap-2 pb-8">
         <h1 className="text-md tracking-wider text-blue-500 font-bold">PROJECTS</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Featured Projects</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">A selection of applications I've built and contributed to.</p>
@@ -299,7 +303,7 @@ export default function Home() {
 
       {/* SKILLS SECTIONS */}
 
-      <section id="skills" className="flex flex-col items-center gap-2 w-full px-16 pb-8">
+      <section id="skills" className="site-container flex flex-col items-center gap-2 pb-8">
         <h1 className="text-md tracking-wider text-blue-500 font-bold">SKILLS</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Skills & Technologies</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">Technologies I use to build high-quality applications.</p>
@@ -373,7 +377,7 @@ export default function Home() {
 
       {/* CONTACT SECTION */}
 
-      <section id="contact" className="flex flex-col items-center gap-2 w-full px-16 pb-8">
+      <section id="contact" className="site-container flex flex-col items-center gap-2 pb-8">
         <h1 className="text-md tracking-wider text-blue-500 font-bold">CONTACT</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Let's Work Together</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">I'm always open to discussing new opportunities and interesting projects.</p>     
@@ -442,18 +446,20 @@ export default function Home() {
         onSubmit={handleLogin}
       />
 
-      <footer className="flex justify-between items-center bg-white text-slate-500 px-16 py-4 inset-x-0 bottom-0 text-sm border-t border-slate-200 dark:text-slate-400 dark:bg-slate-900 dark:border-slate-700 w-full">
-        <p>&copy; {new Date().getFullYear()} Vincent Castro. All rights reserved.</p>
-        <div className="flex gap-6 items-center">
-          <a href="https://github.com/vixtroo" target="_blank" rel="noopener noreferrer">
-            <Image src="/assets/GitHub.png" alt="GitHub" width={30} height={30} className="dark:invert"/>
-          </a>
-          <a href="https://www.linkedin.com/in/vpmcastro" target="_blank" rel="noopener noreferrer">
-            <Image src="/assets/LinkedIn.png" alt="LinkedIn" width={30} height={30}/>
-          </a>
-          <a href="#" className="flex items-center border border-slate-200 text-md px-2 py-[10px] rounded-full dark:border-slate-700">
-            <FontAwesomeIcon icon={faArrowUp}/>
-          </a>
+      <footer className="w-full border-t border-slate-200 bg-white text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-400">
+        <div className="site-container flex items-center justify-between py-4">
+          <p>&copy; {new Date().getFullYear()} Vincent Castro. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <a href="https://github.com/vixtroo" target="_blank" rel="noopener noreferrer">
+              <Image src="/assets/GitHub.png" alt="GitHub" width={30} height={30} className="dark:invert"/>
+            </a>
+            <a href="https://www.linkedin.com/in/vpmcastro" target="_blank" rel="noopener noreferrer">
+              <Image src="/assets/LinkedIn.png" alt="LinkedIn" width={30} height={30}/>
+            </a>
+            <a href="#" className="flex items-center border border-slate-200 text-md px-2 py-[10px] rounded-full dark:border-slate-700">
+              <FontAwesomeIcon icon={faArrowUp}/>
+            </a>
+          </div>
         </div>
       </footer>
       </main>
