@@ -14,6 +14,7 @@ import ThemeToggle from "@/components/buttons/toggle_button";
 import scrollToSection from "@/lib/utils";
 import { ProjectsCarousel } from "@/components/carousels/projects_carousel";
 import { getAllProjects, getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
+import { getAllSkills, Skill } from "@/lib/api/skills";
 import type { ProjectsCardProps } from "@/components/cards/projects_card";
 import { SplashScreen } from "@/components/splash/splash_screen";
 
@@ -25,6 +26,9 @@ export default function Home() {
   const [hasMetMinimumDisplayTime, setHasMetMinimumDisplayTime] = useState(false);
   const [readyProjects, setReadyProjects] = useState<ProjectsCardProps[]>([]);
   const [projectsError, setProjectsError] = useState<string | null>(null);
+  const [apiSkills, setApiSkills] = useState<Skill[]>([]);
+  const [isSkillsLoading, setIsSkillsLoading] = useState(true);
+  const [skillsError, setSkillsError] = useState<string | null>(null);
 
   useEffect(() => {
     setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
@@ -57,6 +61,16 @@ export default function Home() {
         setProjectsError("Unable to load projects right now.");
       })
       .finally(() => setIsProjectsLoading(false));
+  }, []);
+
+  useEffect(() => {
+    getAllSkills()
+      .then(setApiSkills)
+      .catch((error) => {
+        console.error("Error fetching skills", error);
+        setSkillsError("Unable to load skills right now.");
+      })
+      .finally(() => setIsSkillsLoading(false));
   }, []);
 
   const handleLogin = async (credentials: {
@@ -103,38 +117,11 @@ export default function Home() {
   ]
 
   const skillset = {
-    "frontend": [
-      "React.js",
-      "Next.js",
-      "TypeScript",
-      "FlutterFlow",
-      "Tailwind CSS",
-      "HTML5",
-      "CSS3"
-    ],
-    "backend": [
-      "Node.js",
-      "Express.js",
-      "REST API",
-      "PHP",
-      "CodeIgniter"
-    ],
-      "database": [
-      "PostgreSQL",
-      "Supabase",
-      "MySQL",
-      "SQL Server",
-      "Firebase"
-    ],
-    "tools": [
-      "Git",
-      "GitHub",
-      "Vercel",
-      "ChatGPT",
-      "Claude",
-      "GitHub Copilot"
-    ]
-  }
+    frontend: apiSkills.filter((skill) => skill.category === "FRONTEND").map((skill) => skill.name),
+    backend: apiSkills.filter((skill) => skill.category === "BACKEND").map((skill) => skill.name),
+    database: apiSkills.filter((skill) => skill.category === "DATABASE").map((skill) => skill.name),
+    tools: apiSkills.filter((skill) => skill.category === "TOOLS").map((skill) => skill.name),
+  };
 
   const [formData, setFormData] = useState({
     name: "",
@@ -328,11 +315,18 @@ export default function Home() {
         <h1 className="text-md tracking-wider text-blue-500 font-bold">SKILLS</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Skills & Technologies</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">Technologies I use to build high-quality applications.</p>
+        {isSkillsLoading ? (
+          <p className="py-6 text-sm text-slate-600 dark:text-slate-400">Loading skills...</p>
+        ) : skillsError ? (
+          <p className="py-6 text-sm text-red-500">{skillsError}</p>
+        ) : apiSkills.length === 0 ? (
+          <p className="py-6 text-sm text-slate-600 dark:text-slate-400">No skills available.</p>
+        ) : (
         <div className="flex gap-4 w-full">
 
           {/* FRONTEND */}
 
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
+          {skillset.frontend.length > 0 && <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faDesktopAlt} className="text-4xl text-blue-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Frontend</h2>
@@ -344,11 +338,11 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div>}
 
           {/* BACKEND */}
 
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
+          {skillset.backend.length > 0 && <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faCodePullRequest} className="text-4xl text-green-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Backend</h2>
@@ -360,11 +354,11 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div>}
 
           {/* DATABASE */}
 
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
+          {skillset.database.length > 0 && <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faDatabase} className="text-4xl text-violet-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Database</h2>
@@ -376,11 +370,11 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div>}
           
           {/* TOOLS AND OTHERS */}
           
-          <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
+          {skillset.tools.length > 0 && <div className="flex flex-col gap-2 border border-slate-200 rounded-lg h-fit p-4 dark:border-slate-600 w-1/4 shadow-lg">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faTools} className="text-4xl text-orange-300" />
               <h2 className="text-md font-semibold dark:text-slate-400">Tools & Others</h2>
@@ -392,8 +386,9 @@ export default function Home() {
                 </li>
               ))}
             </ul>
-          </div>
+          </div>}
         </div>
+        )}
       </section>
 
       {/* CONTACT SECTION */}
