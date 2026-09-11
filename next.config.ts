@@ -5,14 +5,14 @@ const nextConfig: NextConfig = {
   env: {
     BASE_URL: process.env.BASE_URL,
   },
-  // images: {
-  //   remotePatterns: [
-  //     {
-  //       protocol: 'https',
-  //       hostname: 'img.pokemondb.net',
-  //     },
-  //   ],
-  // },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'fikrsicufexszofuwhqf.supabase.co',
+      },
+    ],
+  },
 };
 
 export default nextConfig;

@@ -13,15 +13,18 @@ import Image from "next/image";
 import ThemeToggle from "@/components/buttons/toggle_button";
 import scrollToSection from "@/lib/utils";
 import { ProjectsCarousel } from "@/components/carousels/projects_carousel";
-import { projects } from "@/data/projects";
-import { getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
+import { getAllProjects, getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
+import type { ProjectsCardProps } from "@/components/cards/projects_card";
 import { SplashScreen } from "@/components/splash/splash_screen";
 
 export default function Home() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isInitialDataLoading, setIsInitialDataLoading] = useState(true);
+  const [isProjectsLoading, setIsProjectsLoading] = useState(true);
   const [hasMetMinimumDisplayTime, setHasMetMinimumDisplayTime] = useState(false);
+  const [readyProjects, setReadyProjects] = useState<ProjectsCardProps[]>([]);
+  const [projectsError, setProjectsError] = useState<string | null>(null);
 
   useEffect(() => {
     setTheme(document.documentElement.classList.contains("dark") ? "dark" : "light");
@@ -44,6 +47,16 @@ export default function Home() {
         console.log("Error fetching currently building project", error);
       })
       .finally(() => setIsInitialDataLoading(false));
+  }, []);
+
+  useEffect(() => {
+    getAllProjects()
+      .then(setReadyProjects)
+      .catch((error) => {
+        console.error("Error fetching ready projects", error);
+        setProjectsError("Unable to load projects right now.");
+      })
+      .finally(() => setIsProjectsLoading(false));
   }, []);
 
   const handleLogin = async (credentials: {
@@ -167,14 +180,14 @@ export default function Home() {
 
   return (
     <>
-      <SplashScreen isVisible={isInitialDataLoading || !hasMetMinimumDisplayTime} />
+      <SplashScreen isVisible={isInitialDataLoading || isProjectsLoading || !hasMetMinimumDisplayTime} />
       <main className="flex min-h-screen flex-col bg-white text-slate-950 dark:bg-slate-950 dark:text-slate-100 items-center">
       <div className="flex flex-col items-center">
 
         {/* NAVBAR */}
         
         <div className="navbar fixed top-0 z-1000 mt-6 w-full px-6 w-full max-w-[1600px]">
-          <div className="navbar-content flex h-[72px] items-center justify-between rounded-lg bg-white/40 px-8 shadow-lg backdrop-blur-xl dark:bg-slate-900/40">
+          <div className="navbar-content flex h-[72px] items-center justify-between rounded-lg bg-white/40 px-10 shadow-lg backdrop-blur-xl dark:bg-slate-900/40">
             <a href="#">
               <div>
                 <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold">V<span className="text-blue-500 text-blue-500 dark:text-blue-600">C.</span></h1>
@@ -298,7 +311,15 @@ export default function Home() {
         <h1 className="text-md tracking-wider text-blue-500 font-bold">PROJECTS</h1>
         <h1 className="text-3xl font-bold text-slate-950 dark:text-slate-400">Featured Projects</h1>
         <p className="text-md text-slate-600 dark:text-slate-400">A selection of applications I've built and contributed to.</p>
-        <ProjectsCarousel projects={projects} />
+        {isProjectsLoading ? (
+          <p className="py-6 text-sm text-slate-600 dark:text-slate-400">Loading projects...</p>
+        ) : projectsError ? (
+          <p className="py-6 text-sm text-red-500">{projectsError}</p>
+        ) : readyProjects.length === 0 ? (
+          <p className="py-6 text-sm text-slate-600 dark:text-slate-400">No ready projects available.</p>
+        ) : (
+          <ProjectsCarousel projects={readyProjects} />
+        )}
       </section>
 
       {/* SKILLS SECTIONS */}
