@@ -80,11 +80,19 @@ body {
   .site-container {
     padding-inline: 32px;
   }
+
+  .navbar,  .navbar-content {
+    padding-inline: 16px;
+  }
 }
 
 @media (max-width: 767px) {
   .site-container {
     padding-inline: 20px;
+  }
+
+  .navbar,  .navbar-content {
+    padding-inline: 8px;
   }
 }
 

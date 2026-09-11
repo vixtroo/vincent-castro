@@ -173,11 +173,11 @@ export default function Home() {
 
         {/* NAVBAR */}
         
-        <div className="fixed top-0 z-1000 mt-6 w-full px-6">
-          <div className="site-container flex h-[72px] items-center justify-between rounded-lg bg-white/40 !px-6 shadow-lg backdrop-blur-xl dark:bg-slate-900/40">
+        <div className="navbar fixed top-0 z-1000 mt-6 w-full px-6 w-full max-w-[1600px]">
+          <div className="navbar-content flex h-[72px] items-center justify-between rounded-lg bg-white/40 px-8 shadow-lg backdrop-blur-xl dark:bg-slate-900/40">
             <a href="#">
               <div>
-                <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold ms-2">V<span className="text-blue-500 text-blue-500 dark:text-blue-600">C.</span></h1>
+                <h1 className="text-5xl text-slate-950 dark:text-slate-100 font-bold">V<span className="text-blue-500 text-blue-500 dark:text-blue-600">C.</span></h1>
               </div>
             </a>
             <div className="flex">
