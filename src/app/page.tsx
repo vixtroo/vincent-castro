@@ -232,7 +232,7 @@ export default function Home() {
             </div>
           )}
           <div className="absolute right-0 animate-float">
-            <Image src="/assets/laptop_display.png" alt="Image" width={800} height={500}/>
+            <Image src="/assets/hero_display.png" alt="Image" width={800} height={500}/>
           </div>
         </div>
         <div className="flex max-w-3xl gap-4 flex-wrap mt-4 mb-6">
