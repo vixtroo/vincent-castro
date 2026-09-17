@@ -15,10 +15,13 @@ import scrollToSection from "@/lib/utils";
 import { ProjectsCarousel } from "@/components/carousels/projects_carousel";
 import { getAllProjects, getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
 import { getAllSkills, Skill } from "@/lib/api/skills";
+import { login } from "@/lib/api/auth";
 import type { ProjectsCardProps } from "@/components/cards/projects_card";
 import { SplashScreen } from "@/components/splash/splash_screen";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isInitialDataLoading, setIsInitialDataLoading] = useState(true);
@@ -78,29 +81,19 @@ export default function Home() {
     password: string;
   }) => {
     try {
-      const response = await fetch("/api/authenticate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
+      const { accessToken } = await login(credentials);
 
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Invalid credentials");
+      localStorage.setItem("authToken", accessToken);
+      setIsLoginOpen(false);
+      router.push("/dashboard");
+    } catch (error) {
+      if (error instanceof TypeError) {
+        throw new Error("Unable to sign in right now. Please try again later.");
       }
 
-      const data = await response.json();
-      // Store auth token if needed
-      localStorage.setItem("authToken", data.token);
-      setIsLoginOpen(false);
-      alert("Login successful");
-      // Redirect to dashboard or update app state as needed
-    } catch (error) {
-      throw new Error(
-        error instanceof Error ? error.message : "Login failed"
-      );
+      throw error instanceof Error
+        ? error
+        : new Error("Unable to sign in. Please try again.");
     }
   };
 
