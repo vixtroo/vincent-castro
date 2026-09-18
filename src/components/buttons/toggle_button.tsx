@@ -7,9 +7,10 @@ import { useEffect, useState } from "react";
 type ThemeToggleProps = {
   theme?: "light" | "dark";
   onThemeChange?: (theme: "light" | "dark") => void;
+  className?: string;
 };
 
-export default function ThemeToggle({ theme, onThemeChange }: ThemeToggleProps) {
+export default function ThemeToggle({ theme, onThemeChange, className }: ThemeToggleProps) {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
@@ -42,10 +43,10 @@ export default function ThemeToggle({ theme, onThemeChange }: ThemeToggleProps) 
   return (
     <button
       onClick={toggleTheme}
-      className="fixed bottom-20 right-4 flex h-10 w-10 items-center justify-center rounded-full
+      className={`${className ?? "fixed bottom-20 right-4"} flex h-10 w-10 items-center justify-center rounded-full
                  text-gray-800 transition
                  bg-gray-100
-                 dark:text-yellow-300 dark:bg-gray-800 cursor-pointer shadow-lg -rotate-50 hover:-rotate-15"
+             dark:text-yellow-300 dark:bg-gray-800 cursor-pointer shadow-lg -rotate-50 hover:-rotate-15`}
       aria-label="Toggle dark mode"
     >
       <FontAwesomeIcon icon={isDark ? faSun : faMoon} />
