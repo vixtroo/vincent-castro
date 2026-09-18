@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import Image from "next/image";
 import {
   ChevronLeft,
@@ -12,6 +15,9 @@ import {
 } from "lucide-react";
 import Sidebar from "@/components/sidebar";
 import Topbar from "@/components/topbar";
+import { useAuth } from "@/components/auth_provider";
+import { SplashScreen } from "@/components/splash/splash_screen";
+import { useRouter } from "next/navigation";
 
 const projects = [
   {
@@ -318,6 +324,19 @@ function SkillsSection() {
 }
 
 export default function Dashboard() {
+  const router = useRouter();
+  const { status } = useAuth();
+
+  useEffect(() => {
+    if (status === "unauthenticated") {
+      router.replace("/");
+    }
+  }, [router, status]);
+
+  if (status !== "authenticated") {
+    return <SplashScreen isVisible />;
+  }
+
   return (
     <div
       id="dashboard"

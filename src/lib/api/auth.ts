@@ -25,6 +25,26 @@ type LoginResponse = {
   };
 };
 
+export const AUTH_TOKEN_KEY = "authToken";
+
+export function getAuthToken(): string | null {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return window.localStorage.getItem(AUTH_TOKEN_KEY);
+}
+
+export function setAuthToken(token: string): void {
+  window.localStorage.setItem(AUTH_TOKEN_KEY, token);
+  window.dispatchEvent(new Event("auth:changed"));
+}
+
+export function clearAuthToken(): void {
+  window.localStorage.removeItem(AUTH_TOKEN_KEY);
+  window.dispatchEvent(new Event("auth:changed"));
+}
+
 export async function login(credentials: LoginCredentials): Promise<LoginResult> {
   const baseUrl = process.env.BASE_URL;
 
@@ -49,4 +69,18 @@ export async function login(credentials: LoginCredentials): Promise<LoginResult>
     expiresIn: result.data?.expires_in,
     user: result.data?.user,
   };
+}
+
+export async function logout(): Promise<void> {
+  const baseUrl = process.env.BASE_URL;
+  const token = getAuthToken();
+
+  const response = await fetch(`${baseUrl}/api/auth/logout`, {
+    method: "POST",
+    headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+  });
+
+  if (!response.ok && response.status !== 401 && response.status !== 403) {
+    throw new Error("Unable to sign out right now. Please try again.");
+  }
 }

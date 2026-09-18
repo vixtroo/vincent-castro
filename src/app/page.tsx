@@ -5,7 +5,7 @@ import {faKey, faArrowRight, faCloudDownload, faBarsStaggered,
         faCircleCheck, faCalendarAlt, faBoxesPacking, faCode, 
         faUsers, faArrowUp, faDesktopAlt, faCodePullRequest, 
         faDatabase, faTools, faEnvelope, faPhone, faMapLocation,
-        faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+        faPaperPlane, faHome } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@/components/buttons/button";
 import { LoginModal } from "@/components/modals/login_modal";
@@ -15,13 +15,14 @@ import scrollToSection from "@/lib/utils";
 import { ProjectsCarousel } from "@/components/carousels/projects_carousel";
 import { getAllProjects, getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
 import { getAllSkills, Skill } from "@/lib/api/skills";
-import { login } from "@/lib/api/auth";
 import type { ProjectsCardProps } from "@/components/cards/projects_card";
 import { SplashScreen } from "@/components/splash/splash_screen";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/components/auth_provider";
 
 export default function Home() {
   const router = useRouter();
+  const { status, signIn } = useAuth();
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isInitialDataLoading, setIsInitialDataLoading] = useState(true);
@@ -81,9 +82,7 @@ export default function Home() {
     password: string;
   }) => {
     try {
-      const { accessToken } = await login(credentials);
-
-      localStorage.setItem("authToken", accessToken);
+      await signIn(credentials);
       setIsLoginOpen(false);
       router.push("/dashboard");
     } catch (error) {
@@ -181,7 +180,13 @@ export default function Home() {
                 <li><a href="#contact" className="px-6 py-3 hover:bg-blue-500 hover:text-white hover:dark:bg-blue-600 rounded-lg">Contact</a></li>
               </ul>
             </div>
-            <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600" onClick={() => setIsLoginOpen(true)}><FontAwesomeIcon icon={faKey}/>Login</Button>
+            {status === "loading" ? (
+              <Button variant="default" size="default" disabled className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600">...</Button>
+            ) : status === "authenticated" ? (
+              <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600" onClick={() => router.push("/dashboard")}><FontAwesomeIcon icon={faHome}/>Dashboard</Button>
+            ) : (
+              <Button variant="default" size="default" className="bg-blue-500 text-white dark:bg-blue-600 hover:bg-blue-600" onClick={() => setIsLoginOpen(true)}><FontAwesomeIcon icon={faKey}/>Login</Button>
+            )}
           </div>
         </div>
       </div>
