@@ -9,7 +9,6 @@ import {
   FolderKanban,
   Pencil,
   Plus,
-  Rocket,
   Search,
   Trash2,
 } from "lucide-react";
@@ -83,7 +82,7 @@ function SearchInput({ label }: { label: string }) {
       <input
         aria-label={label}
         placeholder={label}
-        className="h-9 w-full rounded-md border border-slate-200 bg-white pl-9 pr-3 text-xs outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:ring-blue-950"
+        className="h-9 w-full rounded-md border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:ring-blue-950"
       />
     </label>
   );
@@ -104,7 +103,7 @@ function ActionButton({ action, label }: { action: "edit" | "delete"; label: str
 
 function Pagination({ label }: { label: string }) {
   return (
-    <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-[10px] text-slate-400 dark:border-slate-800">
+    <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-xs text-slate-400 dark:border-slate-800">
       <span>{label}</span>
       <div className="flex items-center gap-1">
         <button
@@ -114,7 +113,7 @@ function Pagination({ label }: { label: string }) {
         >
           <ChevronLeft size={13} />
         </button>
-        <button type="button" className="h-7 w-7 rounded-md bg-blue-600 text-xs text-white">
+        <button type="button" className="h-7 w-7 rounded-md bg-blue-600 text-sm text-white">
           1
         </button>
         <button
@@ -147,9 +146,9 @@ function SummaryCard({
       <div className={`mb-4 flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>
         <Icon size={17} />
       </div>
-      <p className="text-xs text-slate-500 dark:text-slate-400">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-slate-900 dark:text-white">{value}</p>
-      {detail && <p className="mt-1 text-[10px] text-emerald-500">↗ {detail}</p>}
+      <p className="text-sm text-slate-500 dark:text-slate-400">{label}</p>
+      <p className="mt-1 text-3xl font-bold text-slate-900 dark:text-white">{value}</p>
+      {detail && <p className="mt-1 text-xs text-emerald-500">↗ {detail}</p>}
     </div>
   );
 }
@@ -167,15 +166,15 @@ function CurrentlyBuildingCard() {
         />
       </div>
       <div>
-        <p className="text-xs font-semibold text-blue-500">Currently Building</p>
-        <h2 className="mt-1 text-lg font-bold text-slate-900 dark:text-white">
+        <p className="text-sm font-semibold text-blue-500">Currently Building</p>
+        <h2 className="mt-1 text-xl font-bold text-slate-900 dark:text-white">
           Stradcom LTO IT Portal
         </h2>
         <div className="mt-3 flex flex-wrap gap-2">
           {["PHP", "CodeIgniter", "Bootstrap"].map((tech) => (
             <span
               key={tech}
-              className="rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300"
+              className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300"
             >
               {tech}
             </span>
@@ -191,22 +190,22 @@ function ProjectsSection() {
     <section className={`${surface} overflow-hidden`}>
       <div className="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
         <div>
-          <h2 className="font-bold text-slate-900 dark:text-white">Projects</h2>
-          <p className="mt-1 text-xs text-slate-400">Manage your portfolio projects.</p>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">Projects</h2>
+          <p className="mt-1 text-sm text-slate-400">Manage your portfolio projects.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <SearchInput label="Search projects..." />
           <button
             type="button"
-            className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-xs font-medium text-white transition hover:bg-blue-700"
+            className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <Plus size={14} /> Add Project
           </button>
         </div>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[720px] text-left text-[11px]">
-          <thead className="bg-slate-50 text-[10px] uppercase tracking-wide text-slate-400 dark:bg-slate-950/60">
+        <table className="w-full min-w-[720px] text-left text-xs">
+          <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-950/60">
             <tr>
               <th className="px-4 py-3 font-medium">#</th>
               <th className="px-4 py-3 font-medium">Project</th>
@@ -243,7 +242,7 @@ function ProjectsSection() {
                     {project.stack.map((tech) => (
                       <span
                         key={tech}
-                        className="whitespace-nowrap rounded-full bg-blue-50 px-2 py-1 text-[9px] text-blue-600 dark:bg-blue-950/60 dark:text-blue-300"
+                        className="whitespace-nowrap rounded-full bg-blue-50 px-2 py-1 text-xs text-blue-600 dark:bg-blue-950/60 dark:text-blue-300"
                       >
                         {tech}
                       </span>
@@ -272,22 +271,22 @@ function SkillsSection() {
     <section className={`${surface} overflow-hidden`}>
       <div className="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
         <div>
-          <h2 className="font-bold text-slate-900 dark:text-white">Skills</h2>
-          <p className="mt-1 text-xs text-slate-400">Manage your technical skills and expertise.</p>
+          <h2 className="text-lg font-bold text-slate-900 dark:text-white">Skills</h2>
+          <p className="mt-1 text-sm text-slate-400">Manage your technical skills and expertise.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <SearchInput label="Search skills..." />
           <button
             type="button"
-            className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-xs font-medium text-white transition hover:bg-blue-700"
+            className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <Plus size={14} /> Add Skill
           </button>
         </div>
       </div>
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[620px] text-left text-[11px]">
-          <thead className="bg-slate-50 text-[10px] uppercase tracking-wide text-slate-400 dark:bg-slate-950/60">
+        <table className="w-full min-w-[620px] text-left text-xs">
+          <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-400 dark:bg-slate-950/60">
             <tr>
               <th className="px-4 py-3 font-medium">#</th>
               <th className="px-4 py-3 font-medium">Skill Name</th>
@@ -302,7 +301,7 @@ function SkillsSection() {
                 <td className="px-4 py-3 text-slate-400">{index + 1}</td>
                 <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">{name}</td>
                 <td className="px-4 py-3">
-                  <span className="rounded-full bg-blue-50 px-2.5 py-1 text-[9px] font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">
+                  <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">
                     {category}
                   </span>
                 </td>
@@ -348,41 +347,34 @@ export default function Dashboard() {
           <Topbar />
           <main className="mx-auto max-w-[1320px] space-y-6 px-5 py-7 md:px-8 md:py-9">
             <section>
-              <p className="mb-2 inline-flex rounded-full bg-blue-50 px-3 py-1 text-[10px] font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">
-                Welcome back,
-              </p>
-              <h1 className="text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl dark:text-white">
+              <div className="mb-2 px-3 py-2 bg-blue-50 rounded-3xl w-fit dark:bg-blue-900 dark:text-blue-300">
+                <h1 className="text-md font-bold text-blue-500">👋 Welcome back!</h1>
+              </div>
+              <h1 className="text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl dark:text-white">
                 Vincent <span className="text-blue-500">Patrick Castro</span>
               </h1>
-              <p className="mt-2 max-w-xl text-xs leading-5 text-slate-500 dark:text-slate-400">
+              <p className="mt-2 max-w-xl text-sm leading-5 text-slate-500 dark:text-slate-400">
                 Here&apos;s a quick overview of your portfolio, projects, skills and development
                 progress.
               </p>
             </section>
-            <section className="grid gap-4 sm:grid-cols-3">
+            <section className="grid gap-4 sm:grid-cols-4">
               <SummaryCard
                 icon={FolderKanban}
                 label="Total Projects"
                 value="6"
-                detail="+1 this month"
                 tone="bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-300"
               />
               <SummaryCard
                 icon={Code2}
                 label="Total Skills"
                 value="12"
-                detail="+2 this month"
                 tone="bg-emerald-100 text-emerald-500 dark:bg-emerald-950 dark:text-emerald-300"
               />
-              <SummaryCard
-                icon={Rocket}
-                label="Currently Building"
-                value="1"
-                detail="Stradcom LTO IT Portal"
-                tone="bg-violet-100 text-violet-600 dark:bg-violet-950 dark:text-violet-300"
-              />
+              <div className="col-span-2">
+                <CurrentlyBuildingCard />
+              </div>
             </section>
-            <CurrentlyBuildingCard />
             <ProjectsSection />
             <SkillsSection />
           </main>

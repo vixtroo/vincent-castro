@@ -15,12 +15,14 @@ export function Sidebar() {
 
   return (
     <aside className="hidden min-h-screen w-56 shrink-0 border-r border-slate-200 bg-white px-4 py-6 dark:border-slate-800 dark:bg-slate-950 md:flex md:flex-col">
-      <div className="flex items-center gap-2 px-3 pb-10">
-        <span className="text-2xl font-bold text-slate-950 dark:text-white">
-          V<span className="text-blue-500">C.</span>
-        </span>
-        <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Portfolio</span>
-      </div>
+      <a href="/">
+        <div className="flex items-center gap-2 px-3 pb-10">
+            <span className="text-2xl font-bold text-slate-950 dark:text-white">
+            V<span className="text-blue-500">C.</span>
+            </span>
+            <span className="text-sm font-semibold text-slate-700 dark:text-slate-300">Portfolio</span>
+        </div>
+      </a>
       <nav className="space-y-2" aria-label="Dashboard navigation">
         <a
           href="#dashboard"
