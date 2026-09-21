@@ -12,22 +12,42 @@ export type Skill = {
 
 type AllSkillsResponse = {
   success: boolean;
-  data: Skill[] | null;
+  data: {
+    skills: Skill[];
+    total: number;
+    page: number;
+    limit: number;
+  } | null;
   message?: string;
   error?: string;
 };
 
-export async function getAllSkills(): Promise<Skill[]> {
-  const baseUrl = process.env.BASE_URL;
+export type PaginatedSkills = {
+  skills: Skill[];
+  total: number;
+  page: number;
+  limit: number;
+};
 
-  const response = await fetch(`${baseUrl}/api/skills/get-all-skills`);
+export async function getAllSkills({ page, limit }: { page: number; limit: number }): Promise<PaginatedSkills> {
+  const baseUrl = process.env.BASE_URL;
+  const searchParams = new URLSearchParams({ page: String(page), limit: String(limit) });
+
+  const response = await fetch(`${baseUrl}/api/skills/get-all-skills?${searchParams.toString()}`);
   const result: AllSkillsResponse = await response.json();
 
   if (!response.ok || !result.success) {
     throw new Error(result.message || result.error || "Failed to fetch skills");
   }
 
-  return (result.data ?? []).filter(
-    (skill) => skillCategories.includes(skill.category) && skill.name.trim().length > 0,
-  );
+  const data = result.data ?? { skills: [], total: 0, page, limit };
+
+  return {
+    skills: data.skills.filter(
+      (skill) => skillCategories.includes(skill.category) && skill.name.trim().length > 0,
+    ),
+    total: data.total,
+    page: data.page,
+    limit: data.limit,
+  };
 }

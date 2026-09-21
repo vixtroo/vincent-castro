@@ -19,21 +19,7 @@ import { useAuth } from "@/components/auth_provider";
 import { SplashScreen } from "@/components/splash/splash_screen";
 import { useRouter } from "next/navigation";
 import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
-
-const skills = [
-  ["React", "FRONTEND", "Sep 16, 2026 01:20 PM"],
-  ["Next.js", "FRONTEND", "Sep 12, 2026 11:03 AM"],
-  ["Tailwind CSS", "FRONTEND", "Sep 10, 2026 04:17 PM"],
-  ["Node.js", "BACKEND", "Sep 08, 2026 03:42 PM"],
-  ["PHP", "BACKEND", "Sep 05, 2026 10:11 AM"],
-  ["CodeIgniter", "BACKEND", "Sep 02, 2026 09:28 AM"],
-  ["PostgreSQL", "DATABASE", "Aug 30, 2026 02:16 PM"],
-  ["Supabase", "DATABASE", "Aug 27, 2026 10:45 AM"],
-  ["MySQL", "DATABASE", "Aug 24, 2026 01:12 PM"],
-  ["Git", "TOOLS", "Aug 20, 2026 09:04 AM"],
-  ["GitHub", "TOOLS", "Aug 18, 2026 04:37 PM"],
-  ["Figma", "TOOLS", "Aug 15, 2026 11:50 AM"],
-];
+import { getAllSkills, type PaginatedSkills } from "@/lib/api/skills";
 
 const surface =
   "rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900";
@@ -294,7 +280,44 @@ function ProjectsSection() {
   );
 }
 
-function SkillsSection() {
+function SkillsSection({ onTotalChange }: { onTotalChange: (total: number) => void }) {
+  const [skills, setSkills] = useState<PaginatedSkills>({ skills: [], total: 0, page: 1, limit: 10 });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isCurrentRequest = true;
+
+    getAllSkills({ page: skills.page, limit: skills.limit })
+      .then((result) => {
+        if (isCurrentRequest) {
+          setSkills(result);
+          onTotalChange(result.total);
+        }
+      })
+      .catch((requestError) => {
+        if (isCurrentRequest) {
+          console.error("Error fetching dashboard skills", requestError);
+          setError("Unable to load skills right now.");
+        }
+      })
+      .finally(() => {
+        if (isCurrentRequest) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, [onTotalChange, skills.page, skills.limit]);
+
+  const pageCount = Math.max(1, Math.ceil(skills.total / skills.limit));
+
+  const handlePageChange = (page: number) => {
+    setIsLoading(true);
+    setError(null);
+    setSkills((current) => ({ ...current, page }));
+  };
+
   return (
     <section className={`${surface} overflow-hidden`}>
       <div className="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
@@ -326,20 +349,28 @@ function SkillsSection() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-            {skills.map(([name, category, date], index) => (
-              <tr key={name} className="transition hover:bg-blue-50/40 dark:hover:bg-slate-800/50">
-                <td className="px-4 py-3 text-slate-400">{index + 1}</td>
-                <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">{name}</td>
+            {isLoading ? (
+              <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-400">Loading skills...</td></tr>
+            ) : error ? (
+              <tr><td colSpan={5} className="px-4 py-6 text-center text-red-500">{error}</td></tr>
+            ) : skills.skills.length === 0 ? (
+              <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-400">No skills available.</td></tr>
+            ) : skills.skills.map((skill, index) => (
+              <tr key={skill.id} className="transition hover:bg-blue-50/40 dark:hover:bg-slate-800/50">
+                <td className="px-4 py-3 text-slate-400">{(skills.page - 1) * skills.limit + index + 1}</td>
+                <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">{skill.name}</td>
                 <td className="px-4 py-3">
                   <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">
-                    {category}
+                    {skill.category}
                   </span>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-slate-400">{date}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-slate-400">
+                  {skill.created_at ? new Date(skill.created_at).toLocaleString() : "-"}
+                </td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">
-                    <ActionButton action="edit" label={name} />
-                    <ActionButton action="delete" label={name} />
+                    <ActionButton action="edit" label={skill.name} />
+                    <ActionButton action="delete" label={skill.name} />
                   </div>
                 </td>
               </tr>
@@ -347,7 +378,12 @@ function SkillsSection() {
           </tbody>
         </table>
       </div>
-      <Pagination label="Showing 1 - 6 of 12 skills" />
+      <Pagination
+        label={`Showing ${skills.total === 0 ? 0 : (skills.page - 1) * skills.limit + 1} - ${Math.min(skills.page * skills.limit, skills.total)} of ${skills.total} skills`}
+        page={skills.page}
+        pageCount={pageCount}
+        onPageChange={handlePageChange}
+      />
     </section>
   );
 }
@@ -355,6 +391,7 @@ function SkillsSection() {
 export default function Dashboard() {
   const router = useRouter();
   const { status } = useAuth();
+  const [skillsTotal, setSkillsTotal] = useState<number | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -398,7 +435,7 @@ export default function Dashboard() {
               <SummaryCard
                 icon={Code2}
                 label="Total Skills"
-                value="12"
+                value={skillsTotal === null ? "-" : String(skillsTotal)}
                 tone="bg-emerald-100 text-emerald-500 dark:bg-emerald-950 dark:text-emerald-300"
               />
               <div className="col-span-2">
@@ -406,7 +443,7 @@ export default function Dashboard() {
               </div>
             </section>
             <ProjectsSection />
-            <SkillsSection />
+            <SkillsSection onTotalChange={setSkillsTotal} />
           </main>
         </div>
       </div>

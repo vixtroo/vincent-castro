@@ -14,7 +14,7 @@ import ThemeToggle from "@/components/buttons/toggle_button";
 import scrollToSection from "@/lib/utils";
 import { ProjectsCarousel } from "@/components/carousels/projects_carousel";
 import { getAllProjects, getCurrentlyBuildingProject, CurrentlyBuildingProject } from "@/lib/api/projects";
-import { getAllSkills, Skill } from "@/lib/api/skills";
+import { getAllSkills, PaginatedSkills } from "@/lib/api/skills";
 import type { ProjectsCardProps } from "@/components/cards/projects_card";
 import { SplashScreen } from "@/components/splash/splash_screen";
 import { useRouter } from "next/navigation";
@@ -30,7 +30,7 @@ export default function Home() {
   const [hasMetMinimumDisplayTime, setHasMetMinimumDisplayTime] = useState(false);
   const [readyProjects, setReadyProjects] = useState<ProjectsCardProps[]>([]);
   const [projectsError, setProjectsError] = useState<string | null>(null);
-  const [apiSkills, setApiSkills] = useState<Skill[]>([]);
+  const [apiSkills, setApiSkills] = useState<PaginatedSkills>({ skills: [], total: 0, page: 1, limit: 100 });
   const [isSkillsLoading, setIsSkillsLoading] = useState(true);
   const [skillsError, setSkillsError] = useState<string | null>(null);
 
@@ -68,7 +68,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getAllSkills()
+    getAllSkills({ page: 1, limit: 100 })
       .then(setApiSkills)
       .catch((error) => {
         console.error("Error fetching skills", error);
@@ -109,10 +109,10 @@ export default function Home() {
   ]
 
   const skillset = {
-    frontend: apiSkills.filter((skill) => skill.category === "FRONTEND").map((skill) => skill.name),
-    backend: apiSkills.filter((skill) => skill.category === "BACKEND").map((skill) => skill.name),
-    database: apiSkills.filter((skill) => skill.category === "DATABASE").map((skill) => skill.name),
-    tools: apiSkills.filter((skill) => skill.category === "TOOLS").map((skill) => skill.name),
+    frontend: apiSkills.skills.filter((skill) => skill.category === "FRONTEND").map((skill) => skill.name),
+    backend: apiSkills.skills.filter((skill) => skill.category === "BACKEND").map((skill) => skill.name),
+    database: apiSkills.skills.filter((skill) => skill.category === "DATABASE").map((skill) => skill.name),
+    tools: apiSkills.skills.filter((skill) => skill.category === "TOOLS").map((skill) => skill.name),
   };
 
   const [formData, setFormData] = useState({
@@ -317,7 +317,7 @@ export default function Home() {
           <p className="py-6 text-sm text-slate-600 dark:text-slate-400">Loading skills...</p>
         ) : skillsError ? (
           <p className="py-6 text-sm text-red-500">{skillsError}</p>
-        ) : apiSkills.length === 0 ? (
+        ) : apiSkills.skills.length === 0 ? (
           <p className="py-6 text-sm text-slate-600 dark:text-slate-400">No skills available.</p>
         ) : (
         <div className="flex gap-4 w-full">
