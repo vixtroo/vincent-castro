@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   ChevronLeft,
@@ -14,48 +14,11 @@ import {
 } from "lucide-react";
 import Sidebar from "@/components/sidebar";
 import Topbar from "@/components/topbar";
+import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/components/auth_provider";
 import { SplashScreen } from "@/components/splash/splash_screen";
 import { useRouter } from "next/navigation";
-
-const projects = [
-  {
-    name: "Stradcom LTO IT Portal",
-    stack: ["PHP", "CodeIgniter", "Bootstrap"],
-    date: "Sep 16, 2026 10:24 AM",
-    image: "/assets/hero_display.png",
-  },
-  {
-    name: "Rental Platform (Agoda Clone)",
-    stack: ["Next.js", "Tailwind CSS", "React"],
-    date: "Sep 12, 2026 04:32 PM",
-    image: "/assets/display_2.png",
-  },
-  {
-    name: "A.C.E. Community Platform",
-    stack: ["Next.js", "Tailwind CSS", "React"],
-    date: "Sep 08, 2026 11:17 AM",
-    image: "/assets/hero_display.png",
-  },
-  {
-    name: "MD Portal Mobile",
-    stack: ["React Native", "Expo", "Node.js"],
-    date: "Sep 03, 2026 02:45 PM",
-    image: "/assets/display_2.png",
-  },
-  {
-    name: "HoldTones",
-    stack: ["React", "Tailwind CSS", "Node.js"],
-    date: "Aug 28, 2026 09:12 AM",
-    image: "/assets/hero_display.png",
-  },
-  {
-    name: "Safe-Midman App",
-    stack: ["Next.js", "Tailwind CSS", "Node.js"],
-    date: "Aug 21, 2026 05:36 PM",
-    image: "/assets/display_2.png",
-  },
-];
+import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
 
 const skills = [
   ["React", "FRONTEND", "Sep 16, 2026 01:20 PM"],
@@ -91,38 +54,58 @@ function SearchInput({ label }: { label: string }) {
 function ActionButton({ action, label }: { action: "edit" | "delete"; label: string }) {
   const Icon = action === "edit" ? Pencil : Trash2;
   return (
-    <button
+    <Button
       type="button"
       aria-label={`${action} ${label}`}
+      size="icon"
+      variant="ghost"
       className={`flex h-8 w-8 items-center justify-center rounded-md border transition ${action === "delete" ? "border-red-100 text-red-400 hover:bg-red-50 dark:border-red-950 dark:hover:bg-red-950/40" : "border-blue-100 text-blue-500 hover:bg-blue-50 dark:border-blue-950 dark:hover:bg-blue-950/40"}`}
     >
       <Icon size={14} />
-    </button>
+    </Button>
   );
 }
 
-function Pagination({ label }: { label: string }) {
+function Pagination({
+  label,
+  page = 1,
+  pageCount = 1,
+  onPageChange = () => undefined,
+}: {
+  label: string;
+  page?: number;
+  pageCount?: number;
+  onPageChange?: (page: number) => void;
+}) {
   return (
     <div className="flex items-center justify-between border-t border-slate-100 px-4 py-3 text-xs text-slate-400 dark:border-slate-800">
       <span>{label}</span>
       <div className="flex items-center gap-1">
-        <button
+        <Button
           type="button"
           aria-label="Previous page"
+          onClick={() => onPageChange(page - 1)}
+          disabled={page === 1}
+          size="icon"
+          variant="ghost"
           className="flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 dark:border-slate-700"
         >
           <ChevronLeft size={13} />
-        </button>
-        <button type="button" className="h-7 w-7 rounded-md bg-blue-600 text-sm text-white">
-          1
-        </button>
-        <button
+        </Button>
+        <Button type="button" size="icon" variant="default" className="h-7 w-7 rounded-md bg-blue-600 text-sm text-white" aria-label={`Page ${page}`}>
+          {page}
+        </Button>
+        <Button
           type="button"
           aria-label="Next page"
+          onClick={() => onPageChange(page + 1)}
+          disabled={page === pageCount}
+          size="icon"
+          variant="ghost"
           className="flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 dark:border-slate-700"
         >
           <ChevronRight size={13} />
-        </button>
+        </Button>
       </div>
     </div>
   );
@@ -186,6 +169,40 @@ function CurrentlyBuildingCard() {
 }
 
 function ProjectsSection() {
+  const [projects, setProjects] = useState<PaginatedProjects>({ projects: [], total: 0, page: 1, limit: 10 });
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isCurrentRequest = true;
+
+    getAllProjects({ page: projects.page, limit: projects.limit })
+      .then((result) => {
+        if (isCurrentRequest) setProjects(result);
+      })
+      .catch((requestError) => {
+        if (isCurrentRequest) {
+          console.error("Error fetching dashboard projects", requestError);
+          setError("Unable to load projects right now.");
+        }
+      })
+      .finally(() => {
+        if (isCurrentRequest) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, [projects.page, projects.limit]);
+
+  const pageCount = Math.max(1, Math.ceil(projects.total / projects.limit));
+
+  const handlePageChange = (page: number) => {
+    setIsLoading(true);
+    setError(null);
+    setProjects((current) => ({ ...current, page }));
+  };
+
   return (
     <section className={`${surface} overflow-hidden`}>
       <div className="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
@@ -195,12 +212,14 @@ function ProjectsSection() {
         </div>
         <div className="flex flex-wrap gap-2">
           <SearchInput label="Search projects..." />
-          <button
+          <Button
             type="button"
+            size="sm"
+            variant="default"
             className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <Plus size={14} /> Add Project
-          </button>
+          </Button>
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -215,17 +234,21 @@ function ProjectsSection() {
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
-            {projects.map((project, index) => (
+            {isLoading ? (
+              <tr><td colSpan={5} className="px-4 py-6 text-center text-slate-400">Loading projects...</td></tr>
+            ) : error ? (
+              <tr><td colSpan={5} className="px-4 py-6 text-center text-red-500">{error}</td></tr>
+            ) : projects.projects.map((project, index) => (
               <tr
-                key={project.name}
+                key={project.id}
                 className="transition hover:bg-blue-50/40 dark:hover:bg-slate-800/50"
               >
-                <td className="px-4 py-3 text-slate-400">{index + 1}</td>
+                <td className="px-4 py-3 text-slate-400">{(projects.page - 1) * projects.limit + index + 1}</td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2.5">
                     <div className="relative h-8 w-10 overflow-hidden rounded bg-slate-100 dark:bg-slate-800">
                       <Image
-                        src={project.image}
+                        src={project.image_url || "/assets/hero_display.png"}
                         alt=""
                         fill
                         className="object-cover"
@@ -233,13 +256,13 @@ function ProjectsSection() {
                       />
                     </div>
                     <span className="whitespace-nowrap font-medium text-slate-700 dark:text-slate-200">
-                      {project.name}
+                      {project.project_name}
                     </span>
                   </div>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex gap-1.5">
-                    {project.stack.map((tech) => (
+                    {(project.tech_stack ?? []).map((tech) => (
                       <span
                         key={tech}
                         className="whitespace-nowrap rounded-full bg-blue-50 px-2 py-1 text-xs text-blue-600 dark:bg-blue-950/60 dark:text-blue-300"
@@ -249,11 +272,11 @@ function ProjectsSection() {
                     ))}
                   </div>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-slate-400">{project.date}</td>
+                <td className="whitespace-nowrap px-4 py-3 text-slate-400">-</td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">
-                    <ActionButton action="edit" label={project.name} />
-                    <ActionButton action="delete" label={project.name} />
+                    <ActionButton action="edit" label={project.project_name} />
+                    <ActionButton action="delete" label={project.project_name} />
                   </div>
                 </td>
               </tr>
@@ -261,7 +284,12 @@ function ProjectsSection() {
           </tbody>
         </table>
       </div>
-      <Pagination label="Showing 1 - 6 of 6 projects" />
+      <Pagination
+        label={`Showing ${projects.total === 0 ? 0 : (projects.page - 1) * projects.limit + 1} - ${Math.min(projects.page * projects.limit, projects.total)} of ${projects.total} projects`}
+        page={projects.page}
+        pageCount={pageCount}
+        onPageChange={handlePageChange}
+      />
     </section>
   );
 }
@@ -276,12 +304,14 @@ function SkillsSection() {
         </div>
         <div className="flex flex-wrap gap-2">
           <SearchInput label="Search skills..." />
-          <button
+          <Button
             type="button"
+            size="sm"
+            variant="default"
             className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <Plus size={14} /> Add Skill
-          </button>
+          </Button>
         </div>
       </div>
       <div className="overflow-x-auto">
@@ -362,7 +392,7 @@ export default function Dashboard() {
               <SummaryCard
                 icon={FolderKanban}
                 label="Total Projects"
-                value="6"
+                value="-"
                 tone="bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-300"
               />
               <SummaryCard

@@ -58,8 +58,8 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    getAllProjects()
-      .then(setReadyProjects)
+    getAllProjects({ page: 1, limit: 50 })
+      .then((result) => setReadyProjects(result.projects))
       .catch((error) => {
         console.error("Error fetching ready projects", error);
         setProjectsError("Unable to load projects right now.");
