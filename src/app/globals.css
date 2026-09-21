@@ -190,3 +190,44 @@ html.theme-loading *::after {
   transition: 0.3s ease-in-out;
   scroll-padding: 110px; 
 }
+
+/* CATEGORY BADGE */
+.frontend {
+  background-color: #e0f2fe;
+  color: #0284c7;
+
+  .dark & {
+    background-color: #1e3a8a;
+    color: #93c5fd;
+  }
+}
+
+.backend {
+  background-color: #d1fae5;
+  color: #059669;
+
+  .dark & {
+    background-color: #064e3b;
+    color: #6ee7b7;
+  }
+}
+
+.database {
+  background-color: #e9d5ff;
+  color: #7c3aed;
+
+  .dark & {
+    background-color: #4c1d95;
+    color: #c4b5fd;
+  }
+}
+
+.tools {
+  background-color: #fef3c7;
+  color: #b45309;
+
+  .dark & {
+    background-color: #78350f;
+    color: #fcd34d;
+  }
+}

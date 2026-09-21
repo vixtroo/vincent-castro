@@ -363,7 +363,7 @@ function SkillsSection({ onTotalChange }: { onTotalChange: (total: number) => vo
                 <td className="px-4 py-3 text-slate-400">{(skills.page - 1) * skills.limit + index + 1}</td>
                 <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">{skill.name}</td>
                 <td className="px-4 py-3">
-                  <span className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">
+                  <span className={`${skill.category.toLowerCase()} rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300`}>
                     {skill.category}
                   </span>
                 </td>
