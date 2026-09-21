@@ -154,7 +154,7 @@ function CurrentlyBuildingCard() {
   );
 }
 
-function ProjectsSection() {
+function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => void }) {
   const [projects, setProjects] = useState<PaginatedProjects>({ projects: [], total: 0, page: 1, limit: 10 });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -164,7 +164,10 @@ function ProjectsSection() {
 
     getAllProjects({ page: projects.page, limit: projects.limit })
       .then((result) => {
-        if (isCurrentRequest) setProjects(result);
+        if (isCurrentRequest) {
+          setProjects(result);
+          onTotalChange(result.total);
+        }
       })
       .catch((requestError) => {
         if (isCurrentRequest) {
@@ -392,6 +395,7 @@ export default function Dashboard() {
   const router = useRouter();
   const { status } = useAuth();
   const [skillsTotal, setSkillsTotal] = useState<number | null>(null);
+  const [projectsTotal, setProjectsTotal] = useState<number | null>(null);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -429,7 +433,7 @@ export default function Dashboard() {
               <SummaryCard
                 icon={FolderKanban}
                 label="Total Projects"
-                value="-"
+                value={projectsTotal === null ? "-" : String(projectsTotal)}
                 tone="bg-blue-100 text-blue-600 dark:bg-blue-950 dark:text-blue-300"
               />
               <SummaryCard
@@ -442,7 +446,7 @@ export default function Dashboard() {
                 <CurrentlyBuildingCard />
               </div>
             </section>
-            <ProjectsSection />
+            <ProjectsSection onTotalChange={setProjectsTotal} />
             <SkillsSection onTotalChange={setSkillsTotal} />
           </main>
         </div>
