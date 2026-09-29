@@ -11,6 +11,7 @@ import {
   Plus,
   Search,
   Trash2,
+  CircleCheck,
 } from "lucide-react";
 import Sidebar from "@/components/sidebar";
 import Topbar from "@/components/topbar";
@@ -20,6 +21,7 @@ import { SplashScreen } from "@/components/splash/splash_screen";
 import { useRouter } from "next/navigation";
 import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
 import { getAllSkills, type PaginatedSkills } from "@/lib/api/skills";
+import { AddProjectModal } from "@/components/modals/add_project_modal";
 
 const surface =
   "rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900";
@@ -158,6 +160,9 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
   const [projects, setProjects] = useState<PaginatedProjects>({ projects: [], total: 0, page: 1, limit: 10 });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -182,7 +187,22 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
     return () => {
       isCurrentRequest = false;
     };
-  }, [projects.page, projects.limit]);
+  }, [onTotalChange, projects.page, projects.limit, refreshKey]);
+
+  useEffect(() => {
+    if (!successMessage) return;
+    const timeoutId = window.setTimeout(() => setSuccessMessage(""), 3500);
+    return () => window.clearTimeout(timeoutId);
+  }, [successMessage]);
+
+  const handleProjectCreated = () => {
+    setIsAddProjectOpen(false);
+    setSuccessMessage("Project created successfully.");
+    setError(null);
+    setIsLoading(true);
+    setProjects((current) => ({ ...current, page: 1 }));
+    setRefreshKey((current) => current + 1);
+  };
 
   const pageCount = Math.max(1, Math.ceil(projects.total / projects.limit));
 
@@ -193,6 +213,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
   };
 
   return (
+    <>
     <section className={`${surface} overflow-hidden`}>
       <div className="flex flex-col gap-3 border-b border-slate-100 p-4 sm:flex-row sm:items-center sm:justify-between dark:border-slate-800">
         <div>
@@ -205,6 +226,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
             type="button"
             size="sm"
             variant="default"
+            onClick={() => setIsAddProjectOpen(true)}
             className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <Plus size={14} /> Add Project
@@ -280,6 +302,23 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
         onPageChange={handlePageChange}
       />
     </section>
+    {isAddProjectOpen && (
+      <AddProjectModal
+        isOpen={isAddProjectOpen}
+        onClose={() => setIsAddProjectOpen(false)}
+        onCreated={handleProjectCreated}
+      />
+    )}
+    {successMessage && (
+      <div
+        role="status"
+        className="fixed right-5 top-5 z-[2100] flex max-w-[calc(100vw-2.5rem)] items-center gap-2 rounded-md border border-emerald-200 bg-white px-4 py-3 text-sm font-medium text-emerald-700 shadow-lg dark:border-emerald-900 dark:bg-slate-900 dark:text-emerald-300"
+      >
+        <CircleCheck size={17} />
+        {successMessage}
+      </div>
+    )}
+    </>
   );
 }
 

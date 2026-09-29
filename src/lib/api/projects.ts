@@ -1,4 +1,5 @@
 import type { ProjectsCardProps } from "@/components/cards/projects_card";
+import { authenticatedFetch } from "@/lib/api/client";
 
 export interface CurrentlyBuildingProject {
   id: number;
@@ -47,6 +48,39 @@ export type PaginatedProjects = {
   page: number;
   limit: number;
 };
+
+export type CreateProjectInput = {
+  projectImage: File;
+  projectName: string;
+  description: string;
+  techStack: string[];
+};
+
+export async function createProject({
+  projectImage,
+  projectName,
+  description,
+  techStack,
+}: CreateProjectInput): Promise<void> {
+  const baseUrl = process.env.BASE_URL;
+  const formData = new FormData();
+
+  formData.append("project_image", projectImage);
+  formData.append("project_name", projectName);
+  formData.append("description", description);
+  formData.append("tech_stack", JSON.stringify(techStack));
+
+  const response = await authenticatedFetch(`${baseUrl}/api/projects/create-project`, {
+    method: "POST",
+    body: formData,
+  });
+  const result: { success?: boolean; message?: string; error?: string } | null =
+    await response.json().catch(() => null);
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(result?.message || result?.error || "Unable to create project. Please try again.");
+  }
+}
 
 export async function getCurrentlyBuildingProject(): Promise<CurrentlyBuildingProject | null> {
   const baseUrl = process.env.BASE_URL;
