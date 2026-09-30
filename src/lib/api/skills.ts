@@ -1,3 +1,5 @@
+import { authenticatedFetch } from "@/lib/api/client";
+
 export const skillCategories = ["FRONTEND", "BACKEND", "DATABASE", "TOOLS"] as const;
 
 export type SkillCategory = (typeof skillCategories)[number];
@@ -28,6 +30,35 @@ export type PaginatedSkills = {
   page: number;
   limit: number;
 };
+
+export async function createSkill({ name, category }: { name: string; category: SkillCategory }): Promise<void> {
+  const baseUrl = process.env.BASE_URL;
+  const response = await authenticatedFetch(`${baseUrl}/api/skills/create-skill`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, category }),
+  });
+  const result: { success?: boolean; message?: string; error?: string } | null =
+    await response.json().catch(() => null);
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(result?.message || result?.error || "Unable to create skill. Please try again.");
+  }
+}
+
+export async function deleteSkill(id: number): Promise<void> {
+  const baseUrl = process.env.BASE_URL;
+  const response = await authenticatedFetch(
+    `${baseUrl}/api/skills/${encodeURIComponent(String(id))}/delete-skill`,
+    { method: "DELETE" },
+  );
+  const result: { success?: boolean; message?: string; error?: string } | null =
+    await response.json().catch(() => null);
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(result?.message || result?.error || "Unable to delete skill. Please try again.");
+  }
+}
 
 export async function getAllSkills({ page, limit }: { page: number; limit: number }): Promise<PaginatedSkills> {
   const baseUrl = process.env.BASE_URL;

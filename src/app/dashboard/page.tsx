@@ -22,6 +22,8 @@ import { useRouter } from "next/navigation";
 import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
 import { getAllSkills, type PaginatedSkills } from "@/lib/api/skills";
 import { AddProjectModal } from "@/components/modals/add_project_modal";
+import { AddSkillModal } from "@/components/modals/add_skill_modal";
+import { DeleteSkillModal } from "@/components/modals/delete_skill_modal";
 import { EditProjectModal } from "@/components/modals/edit_project_modal";
 import { DeleteProjectModal } from "@/components/modals/delete_project_modal";
 
@@ -159,7 +161,13 @@ function CurrentlyBuildingCard() {
   );
 }
 
-function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => void }) {
+function ProjectsSection({
+  onTotalChange,
+  onSuccess,
+}: {
+  onTotalChange: (total: number) => void;
+  onSuccess: (message: string) => void;
+}) {
   const [projects, setProjects] = useState<PaginatedProjects>({ projects: [], total: 0, page: 1, limit: 10 });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -167,7 +175,6 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
   const [selectedProject, setSelectedProject] = useState<PaginatedProjects["projects"][number] | null>(null);
   const [projectToDelete, setProjectToDelete] = useState<PaginatedProjects["projects"][number] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -194,15 +201,9 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
     };
   }, [onTotalChange, projects.page, projects.limit, refreshKey]);
 
-  useEffect(() => {
-    if (!successMessage) return;
-    const timeoutId = window.setTimeout(() => setSuccessMessage(""), 3500);
-    return () => window.clearTimeout(timeoutId);
-  }, [successMessage]);
-
   const handleProjectCreated = () => {
     setIsAddProjectOpen(false);
-    setSuccessMessage("Project created successfully.");
+    onSuccess("Project created successfully.");
     setError(null);
     setIsLoading(true);
     setProjects((current) => ({ ...current, page: 1 }));
@@ -211,7 +212,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
 
   const handleProjectUpdated = () => {
     setSelectedProject(null);
-    setSuccessMessage("Project updated successfully.");
+    onSuccess("Project updated successfully.");
     setError(null);
     setIsLoading(true);
     setRefreshKey((current) => current + 1);
@@ -219,7 +220,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
 
   const handleProjectDeleted = (projectId: string) => {
     setProjectToDelete(null);
-    setSuccessMessage("Project deleted successfully.");
+    onSuccess("Project deleted successfully.");
     setError(null);
     onTotalChange(Math.max(0, projects.total - 1));
     setProjects((current) => {
@@ -355,23 +356,23 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
         onDeleted={handleProjectDeleted}
       />
     )}
-    {successMessage && (
-      <div
-        role="status"
-        className="fixed right-5 top-5 z-[2100] flex max-w-[calc(100vw-2.5rem)] items-center gap-2 rounded-md border border-emerald-200 bg-white px-4 py-3 text-sm font-medium text-emerald-700 shadow-lg dark:border-emerald-900 dark:bg-slate-900 dark:text-emerald-300"
-      >
-        <CircleCheck size={17} />
-        {successMessage}
-      </div>
-    )}
     </>
   );
 }
 
-function SkillsSection({ onTotalChange }: { onTotalChange: (total: number) => void }) {
+function SkillsSection({
+  onTotalChange,
+  onSuccess,
+}: {
+  onTotalChange: (total: number) => void;
+  onSuccess: (message: string) => void;
+}) {
   const [skills, setSkills] = useState<PaginatedSkills>({ skills: [], total: 0, page: 1, limit: 10 });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAddSkillOpen, setIsAddSkillOpen] = useState(false);
+  const [skillToDelete, setSkillToDelete] = useState<PaginatedSkills["skills"][number] | null>(null);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   useEffect(() => {
     let isCurrentRequest = true;
@@ -396,7 +397,33 @@ function SkillsSection({ onTotalChange }: { onTotalChange: (total: number) => vo
     return () => {
       isCurrentRequest = false;
     };
-  }, [onTotalChange, skills.page, skills.limit]);
+  }, [onTotalChange, skills.page, skills.limit, refreshKey]);
+
+  const handleSkillCreated = () => {
+    setIsAddSkillOpen(false);
+    onSuccess("Skill created successfully.");
+    setIsLoading(true);
+    setError(null);
+    setSkills((current) => ({ ...current, page: 1 }));
+    setRefreshKey((current) => current + 1);
+  };
+
+  const handleSkillDeleted = (skillId: number) => {
+    setSkillToDelete(null);
+    onSuccess("Skill deleted successfully.");
+    setError(null);
+    onTotalChange(Math.max(0, skills.total - 1));
+    setSkills((current) => {
+      const remainingSkills = current.skills.filter((skill) => skill.id !== skillId);
+      return {
+        ...current,
+        skills: remainingSkills,
+        total: Math.max(0, current.total - 1),
+        page: remainingSkills.length === 0 && current.page > 1 ? current.page - 1 : current.page,
+      };
+    });
+    setRefreshKey((current) => current + 1);
+  };
 
   const pageCount = Math.max(1, Math.ceil(skills.total / skills.limit));
 
@@ -419,6 +446,7 @@ function SkillsSection({ onTotalChange }: { onTotalChange: (total: number) => vo
             type="button"
             size="sm"
             variant="default"
+            onClick={() => setIsAddSkillOpen(true)}
             className="flex h-9 items-center gap-1.5 rounded-md bg-blue-600 px-3 text-sm font-medium text-white transition hover:bg-blue-700"
           >
             <Plus size={14} /> Add Skill
@@ -458,7 +486,7 @@ function SkillsSection({ onTotalChange }: { onTotalChange: (total: number) => vo
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">
                     <ActionButton action="edit" label={skill.name} />
-                    <ActionButton action="delete" label={skill.name} />
+                    <ActionButton action="delete" label={skill.name} onClick={() => setSkillToDelete(skill)} />
                   </div>
                 </td>
               </tr>
@@ -472,6 +500,21 @@ function SkillsSection({ onTotalChange }: { onTotalChange: (total: number) => vo
         pageCount={pageCount}
         onPageChange={handlePageChange}
       />
+      {isAddSkillOpen && (
+        <AddSkillModal
+          isOpen={isAddSkillOpen}
+          onClose={() => setIsAddSkillOpen(false)}
+          onCreated={handleSkillCreated}
+        />
+      )}
+      {skillToDelete && (
+        <DeleteSkillModal
+          key={skillToDelete.id}
+          skill={skillToDelete}
+          onClose={() => setSkillToDelete(null)}
+          onDeleted={handleSkillDeleted}
+        />
+      )}
     </section>
   );
 }
@@ -481,6 +524,13 @@ export default function Dashboard() {
   const { status } = useAuth();
   const [skillsTotal, setSkillsTotal] = useState<number | null>(null);
   const [projectsTotal, setProjectsTotal] = useState<number | null>(null);
+  const [successMessage, setSuccessMessage] = useState("");
+
+  useEffect(() => {
+    if (!successMessage) return;
+    const timeoutId = window.setTimeout(() => setSuccessMessage(""), 3500);
+    return () => window.clearTimeout(timeoutId);
+  }, [successMessage]);
 
   useEffect(() => {
     if (status === "unauthenticated") {
@@ -531,8 +581,17 @@ export default function Dashboard() {
                 <CurrentlyBuildingCard />
               </div>
             </section>
-            <ProjectsSection onTotalChange={setProjectsTotal} />
-            <SkillsSection onTotalChange={setSkillsTotal} />
+            <ProjectsSection onTotalChange={setProjectsTotal} onSuccess={setSuccessMessage} />
+            <SkillsSection onTotalChange={setSkillsTotal} onSuccess={setSuccessMessage} />
+            {successMessage && (
+              <div
+                role="status"
+                className="fixed right-5 top-5 z-[2100] flex max-w-[calc(100vw-2.5rem)] items-center gap-2 rounded-md border border-emerald-200 bg-white px-4 py-3 text-sm font-medium text-emerald-700 shadow-lg dark:border-emerald-900 dark:bg-slate-900 dark:text-emerald-300"
+              >
+                <CircleCheck size={17} />
+                {successMessage}
+              </div>
+            )}
           </main>
         </div>
       </div>
