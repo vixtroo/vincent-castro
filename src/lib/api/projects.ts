@@ -117,6 +117,20 @@ export async function updateProject({
   }
 }
 
+export async function deleteProject(id: string): Promise<void> {
+  const baseUrl = process.env.BASE_URL;
+  const response = await authenticatedFetch(
+    `${baseUrl}/api/projects/${encodeURIComponent(id)}/delete-project`,
+    { method: "DELETE" },
+  );
+  const result: { success?: boolean; message?: string; error?: string } | null =
+    await response.json().catch(() => null);
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(result?.message || result?.error || "Unable to delete project. Please try again.");
+  }
+}
+
 export async function getCurrentlyBuildingProject(): Promise<CurrentlyBuildingProject | null> {
   const baseUrl = process.env.BASE_URL;
 

@@ -23,6 +23,7 @@ import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
 import { getAllSkills, type PaginatedSkills } from "@/lib/api/skills";
 import { AddProjectModal } from "@/components/modals/add_project_modal";
 import { EditProjectModal } from "@/components/modals/edit_project_modal";
+import { DeleteProjectModal } from "@/components/modals/delete_project_modal";
 
 const surface =
   "rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900";
@@ -164,6 +165,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
   const [error, setError] = useState<string | null>(null);
   const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<PaginatedProjects["projects"][number] | null>(null);
+  const [projectToDelete, setProjectToDelete] = useState<PaginatedProjects["projects"][number] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -212,6 +214,23 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
     setSuccessMessage("Project updated successfully.");
     setError(null);
     setIsLoading(true);
+    setRefreshKey((current) => current + 1);
+  };
+
+  const handleProjectDeleted = (projectId: string) => {
+    setProjectToDelete(null);
+    setSuccessMessage("Project deleted successfully.");
+    setError(null);
+    onTotalChange(Math.max(0, projects.total - 1));
+    setProjects((current) => {
+      const remainingProjects = current.projects.filter((project) => project.id !== projectId);
+      return {
+        ...current,
+        projects: remainingProjects,
+        total: Math.max(0, current.total - 1),
+        page: remainingProjects.length === 0 && current.page > 1 ? current.page - 1 : current.page,
+      };
+    });
     setRefreshKey((current) => current + 1);
   };
 
@@ -298,7 +317,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">
                     <ActionButton action="edit" label={project.project_name} onClick={() => setSelectedProject(project)} />
-                    <ActionButton action="delete" label={project.project_name} />
+                    <ActionButton action="delete" label={project.project_name} onClick={() => setProjectToDelete(project)} />
                   </div>
                 </td>
               </tr>
@@ -326,6 +345,14 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
         project={selectedProject}
         onClose={() => setSelectedProject(null)}
         onUpdated={handleProjectUpdated}
+      />
+    )}
+    {projectToDelete && (
+      <DeleteProjectModal
+        key={projectToDelete.id}
+        project={projectToDelete}
+        onClose={() => setProjectToDelete(null)}
+        onDeleted={handleProjectDeleted}
       />
     )}
     {successMessage && (
