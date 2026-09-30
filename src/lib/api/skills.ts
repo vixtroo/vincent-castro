@@ -7,6 +7,7 @@ export type SkillCategory = (typeof skillCategories)[number];
 export type Skill = {
   id: number;
   created_at: string;
+  updated_at: string;
   name: string;
   category: SkillCategory;
   user_id: string;

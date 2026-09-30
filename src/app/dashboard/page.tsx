@@ -491,7 +491,7 @@ function SkillsSection({
                   </span>
                 </td>
                 <td className="whitespace-nowrap px-4 py-3 text-slate-400">
-                  {skill.created_at ? new Date(skill.created_at).toLocaleString() : "-"}
+                  {skill.updated_at ? new Date(skill.updated_at).toLocaleString() : "-"}
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">

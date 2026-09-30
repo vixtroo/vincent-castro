@@ -14,7 +14,7 @@ export function ProjectsCard({
 	tech_stack = [],
 }: ProjectsCardProps) {
 	return (
-		<article className="group flex h-full min-h-[420px] w-[320px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg transition duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900">
+		<article className="group flex h-full min-h-[450px] w-[364px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg transition duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900">
 			<div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
 				{image_url ? (
 					<Image
@@ -36,7 +36,7 @@ export function ProjectsCard({
 					<h2 className="line-clamp-2 text-xl font-bold text-slate-950 dark:text-slate-100">
 						{project_name}
 					</h2>
-					<p className="line-clamp-3 min-h-[4.5rem] text-sm leading-6 text-slate-600 dark:text-slate-400">
+					<p className="line-clamp-4 min-h-[4.5rem] text-sm leading-6 text-slate-600 dark:text-slate-400">
 						{description}
 					</p>
 				</div>
