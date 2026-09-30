@@ -23,6 +23,7 @@ import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
 import { getAllSkills, type PaginatedSkills } from "@/lib/api/skills";
 import { AddProjectModal } from "@/components/modals/add_project_modal";
 import { AddSkillModal } from "@/components/modals/add_skill_modal";
+import { UpdateSkillModal } from "@/components/modals/update_skill_modal";
 import { DeleteSkillModal } from "@/components/modals/delete_skill_modal";
 import { EditProjectModal } from "@/components/modals/edit_project_modal";
 import { DeleteProjectModal } from "@/components/modals/delete_project_modal";
@@ -371,6 +372,7 @@ function SkillsSection({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAddSkillOpen, setIsAddSkillOpen] = useState(false);
+  const [skillToUpdate, setSkillToUpdate] = useState<PaginatedSkills["skills"][number] | null>(null);
   const [skillToDelete, setSkillToDelete] = useState<PaginatedSkills["skills"][number] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
 
@@ -405,6 +407,14 @@ function SkillsSection({
     setIsLoading(true);
     setError(null);
     setSkills((current) => ({ ...current, page: 1 }));
+    setRefreshKey((current) => current + 1);
+  };
+
+  const handleSkillUpdated = () => {
+    setSkillToUpdate(null);
+    onSuccess("Skill updated successfully.");
+    setIsLoading(true);
+    setError(null);
     setRefreshKey((current) => current + 1);
   };
 
@@ -485,7 +495,7 @@ function SkillsSection({
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">
-                    <ActionButton action="edit" label={skill.name} />
+                    <ActionButton action="edit" label={skill.name} onClick={() => setSkillToUpdate(skill)} />
                     <ActionButton action="delete" label={skill.name} onClick={() => setSkillToDelete(skill)} />
                   </div>
                 </td>
@@ -505,6 +515,14 @@ function SkillsSection({
           isOpen={isAddSkillOpen}
           onClose={() => setIsAddSkillOpen(false)}
           onCreated={handleSkillCreated}
+        />
+      )}
+      {skillToUpdate && (
+        <UpdateSkillModal
+          key={skillToUpdate.id}
+          skill={skillToUpdate}
+          onClose={() => setSkillToUpdate(null)}
+          onUpdated={handleSkillUpdated}
         />
       )}
       {skillToDelete && (

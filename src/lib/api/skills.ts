@@ -46,6 +46,32 @@ export async function createSkill({ name, category }: { name: string; category: 
   }
 }
 
+export async function updateSkill({
+  id,
+  name,
+  category,
+}: {
+  id: number;
+  name: string;
+  category: SkillCategory;
+}): Promise<void> {
+  const baseUrl = process.env.BASE_URL;
+  const response = await authenticatedFetch(
+    `${baseUrl}/api/skills/${encodeURIComponent(String(id))}/update-skill`,
+    {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, category }),
+    },
+  );
+  const result: { success?: boolean; message?: string; error?: string } | null =
+    await response.json().catch(() => null);
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(result?.message || result?.error || "Unable to update skill. Please try again.");
+  }
+}
+
 export async function deleteSkill(id: number): Promise<void> {
   const baseUrl = process.env.BASE_URL;
   const response = await authenticatedFetch(
