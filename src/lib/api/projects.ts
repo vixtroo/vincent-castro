@@ -56,6 +56,14 @@ export type CreateProjectInput = {
   techStack: string[];
 };
 
+export type UpdateProjectInput = {
+  id: string;
+  projectImage?: File;
+  projectName: string;
+  description: string;
+  techStack: string[];
+};
+
 export async function createProject({
   projectImage,
   projectName,
@@ -79,6 +87,33 @@ export async function createProject({
 
   if (!response.ok || result?.success === false) {
     throw new Error(result?.message || result?.error || "Unable to create project. Please try again.");
+  }
+}
+
+export async function updateProject({
+  id,
+  projectImage,
+  projectName,
+  description,
+  techStack,
+}: UpdateProjectInput): Promise<void> {
+  const baseUrl = process.env.BASE_URL;
+  const formData = new FormData();
+
+  if (projectImage) formData.append("project_image", projectImage);
+  formData.append("project_name", projectName);
+  formData.append("description", description);
+  formData.append("tech_stack", JSON.stringify(techStack));
+
+  const response = await authenticatedFetch(
+    `${baseUrl}/api/projects/${encodeURIComponent(id)}/update-project`,
+    { method: "PUT", body: formData },
+  );
+  const result: { success?: boolean; message?: string; error?: string } | null =
+    await response.json().catch(() => null);
+
+  if (!response.ok || result?.success === false) {
+    throw new Error(result?.message || result?.error || "Unable to update project. Please try again.");
   }
 }
 

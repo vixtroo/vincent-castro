@@ -22,6 +22,7 @@ import { useRouter } from "next/navigation";
 import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
 import { getAllSkills, type PaginatedSkills } from "@/lib/api/skills";
 import { AddProjectModal } from "@/components/modals/add_project_modal";
+import { EditProjectModal } from "@/components/modals/edit_project_modal";
 
 const surface =
   "rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900";
@@ -39,12 +40,13 @@ function SearchInput({ label }: { label: string }) {
   );
 }
 
-function ActionButton({ action, label }: { action: "edit" | "delete"; label: string }) {
+function ActionButton({ action, label, onClick }: { action: "edit" | "delete"; label: string; onClick?: () => void }) {
   const Icon = action === "edit" ? Pencil : Trash2;
   return (
     <Button
       type="button"
       aria-label={`${action} ${label}`}
+      onClick={onClick}
       size="icon"
       variant="ghost"
       className={`flex h-8 w-8 items-center justify-center rounded-md border transition ${action === "delete" ? "border-red-100 text-red-400 hover:bg-red-50 dark:border-red-950 dark:hover:bg-red-950/40" : "border-blue-100 text-blue-500 hover:bg-blue-50 dark:border-blue-950 dark:hover:bg-blue-950/40"}`}
@@ -161,6 +163,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAddProjectOpen, setIsAddProjectOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<PaginatedProjects["projects"][number] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
   const [successMessage, setSuccessMessage] = useState("");
 
@@ -201,6 +204,14 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
     setError(null);
     setIsLoading(true);
     setProjects((current) => ({ ...current, page: 1 }));
+    setRefreshKey((current) => current + 1);
+  };
+
+  const handleProjectUpdated = () => {
+    setSelectedProject(null);
+    setSuccessMessage("Project updated successfully.");
+    setError(null);
+    setIsLoading(true);
     setRefreshKey((current) => current + 1);
   };
 
@@ -286,7 +297,7 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
                 <td className="whitespace-nowrap px-4 py-3 text-slate-400">-</td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">
-                    <ActionButton action="edit" label={project.project_name} />
+                    <ActionButton action="edit" label={project.project_name} onClick={() => setSelectedProject(project)} />
                     <ActionButton action="delete" label={project.project_name} />
                   </div>
                 </td>
@@ -307,6 +318,14 @@ function ProjectsSection({ onTotalChange }: { onTotalChange: (total: number) => 
         isOpen={isAddProjectOpen}
         onClose={() => setIsAddProjectOpen(false)}
         onCreated={handleProjectCreated}
+      />
+    )}
+    {selectedProject && (
+      <EditProjectModal
+        key={selectedProject.id}
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+        onUpdated={handleProjectUpdated}
       />
     )}
     {successMessage && (
