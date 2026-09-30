@@ -24,6 +24,7 @@ type CurrentlyBuildingProjectResponse = {
 
 type ApiProject = {
   id: string;
+  updated_at: string;
   project_name: string | null;
   description: string | null;
   project_image: string | null;
@@ -166,6 +167,7 @@ export async function getAllProjects({ page, limit }: { page: number; limit: num
       tech_stack: (project.tech_stack ?? []).filter(
         (technology): technology is string => typeof technology === "string" && technology.trim().length > 0,
       ),
+      updated_at: project.updated_at,
     })),
     total: data.total,
     page: data.page,

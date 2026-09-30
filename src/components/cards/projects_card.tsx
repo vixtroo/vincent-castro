@@ -5,6 +5,7 @@ export interface ProjectsCardProps {
 	project_name: string;
 	description: string;
 	tech_stack?: readonly string[];
+	updated_at?: string;
 }
 
 export function ProjectsCard({

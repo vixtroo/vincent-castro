@@ -315,7 +315,9 @@ function ProjectsSection({
                     ))}
                   </div>
                 </td>
-                <td className="whitespace-nowrap px-4 py-3 text-slate-400">-</td>
+                <td className="whitespace-nowrap px-4 py-3 text-slate-400">
+                  {project.updated_at ? new Date(project.updated_at).toLocaleString() : "-"}
+                </td>
                 <td className="px-4 py-3">
                   <div className="flex justify-end gap-1.5">
                     <ActionButton action="edit" label={project.project_name} onClick={() => setSelectedProject(project)} />
