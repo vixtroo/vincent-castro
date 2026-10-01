@@ -63,16 +63,6 @@ export function ProjectsCard({
 						))}
 					</ul>
 				)}
-
-				{features.length > 0 && (
-					<ul className="flex flex-wrap gap-2" aria-label="Project features">
-						{features.map((feature) => (
-							<li key={feature} className="rounded-md bg-blue-50 px-2.5 py-1 text-xs text-blue-700 dark:bg-blue-950/60 dark:text-blue-300">
-								{feature}
-							</li>
-						))}
-					</ul>
-				)}
 			</div>
 		</article>
 	);
