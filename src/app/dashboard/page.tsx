@@ -19,7 +19,12 @@ import { Button } from "@/components/buttons/button";
 import { useAuth } from "@/components/auth_provider";
 import { SplashScreen } from "@/components/splash/splash_screen";
 import { useRouter } from "next/navigation";
-import { getAllProjects, type PaginatedProjects } from "@/lib/api/projects";
+import {
+  getAllProjects,
+  getCurrentlyBuildingProject,
+  type CurrentlyBuildingProject,
+  type PaginatedProjects,
+} from "@/lib/api/projects";
 import { getAllSkills, type PaginatedSkills } from "@/lib/api/skills";
 import { AddProjectModal } from "@/components/modals/add_project_modal";
 import { AddSkillModal } from "@/components/modals/add_skill_modal";
@@ -131,32 +136,76 @@ function SummaryCard({
 }
 
 function CurrentlyBuildingCard() {
+  const [project, setProject] = useState<CurrentlyBuildingProject | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let isCurrentRequest = true;
+
+    getCurrentlyBuildingProject()
+      .then((result) => {
+        if (isCurrentRequest) setProject(result);
+      })
+      .catch((requestError) => {
+        if (isCurrentRequest) {
+          console.error("Error fetching currently building project", requestError);
+          setError("Unable to load currently building project right now.");
+        }
+      })
+      .finally(() => {
+        if (isCurrentRequest) setIsLoading(false);
+      });
+
+    return () => {
+      isCurrentRequest = false;
+    };
+  }, []);
+
   return (
     <article className={`${surface} flex flex-col gap-4 p-4 sm:flex-row sm:items-center`}>
       <div className="relative h-28 w-full shrink-0 overflow-hidden rounded-md bg-slate-100 sm:w-44 dark:bg-slate-800">
-        <Image
-          src="/assets/hero_display.png"
-          alt="Stradcom LTO IT Portal preview"
-          fill
-          className="object-cover"
-          sizes="176px"
-        />
+        {project?.project_image.trim() ? (
+          <Image
+            src={project.project_image}
+            alt={`${project.project_name} preview`}
+            fill
+            className="object-cover"
+            sizes="176px"
+          />
+        ) : !isLoading && !error ? (
+          <span className="flex h-full items-center justify-center text-xs text-slate-400">
+            Project preview unavailable
+          </span>
+        ) : null}
       </div>
-      <div>
+      <div className="min-w-0 flex-1">
         <p className="text-sm font-semibold text-blue-500">Currently Building</p>
-        <h2 className="mt-1 text-xl font-bold text-slate-900 dark:text-white">
-          Stradcom LTO IT Portal
-        </h2>
-        <div className="mt-3 flex flex-wrap gap-2">
-          {["PHP", "CodeIgniter", "Bootstrap"].map((tech) => (
-            <span
-              key={tech}
-              className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
+        {isLoading ? (
+          <p role="status" className="mt-1 text-sm text-slate-400">Loading currently building project...</p>
+        ) : error ? (
+          <p role="alert" className="mt-1 text-sm text-red-500">{error}</p>
+        ) : !project ? (
+          <p className="mt-1 text-sm text-slate-400">No project is currently marked as building.</p>
+        ) : (
+          <>
+            <h2 className="mt-1 text-xl font-bold text-slate-900 dark:text-white">
+              {project.project_name}
+            </h2>
+            {project.tech_stack.length > 0 && (
+              <div className="mt-3 flex flex-wrap gap-2" aria-label="Technology stack">
+                {project.tech_stack.map((tech) => (
+                  <span
+                    key={tech}
+                    className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            )}
+          </>
+        )}
       </div>
     </article>
   );
@@ -165,9 +214,11 @@ function CurrentlyBuildingCard() {
 function ProjectsSection({
   onTotalChange,
   onSuccess,
+  onCurrentlyBuildingRefresh,
 }: {
   onTotalChange: (total: number) => void;
   onSuccess: (message: string) => void;
+  onCurrentlyBuildingRefresh: () => void;
 }) {
   const [projects, setProjects] = useState<PaginatedProjects>({ projects: [], total: 0, page: 1, limit: 10 });
   const [isLoading, setIsLoading] = useState(true);
@@ -205,6 +256,7 @@ function ProjectsSection({
   const handleProjectCreated = () => {
     setIsAddProjectOpen(false);
     onSuccess("Project created successfully.");
+    onCurrentlyBuildingRefresh();
     setError(null);
     setIsLoading(true);
     setProjects((current) => ({ ...current, page: 1 }));
@@ -214,6 +266,7 @@ function ProjectsSection({
   const handleProjectUpdated = () => {
     setSelectedProject(null);
     onSuccess("Project updated successfully.");
+    onCurrentlyBuildingRefresh();
     setError(null);
     setIsLoading(true);
     setRefreshKey((current) => current + 1);
@@ -549,6 +602,7 @@ export default function Dashboard() {
   const { status } = useAuth();
   const [skillsTotal, setSkillsTotal] = useState<number | null>(null);
   const [projectsTotal, setProjectsTotal] = useState<number | null>(null);
+  const [currentlyBuildingRefreshKey, setCurrentlyBuildingRefreshKey] = useState(0);
   const [successMessage, setSuccessMessage] = useState("");
 
   useEffect(() => {
@@ -603,10 +657,16 @@ export default function Dashboard() {
                 tone="bg-emerald-100 text-emerald-500 dark:bg-emerald-950 dark:text-emerald-300"
               />
               <div className="col-span-2">
-                <CurrentlyBuildingCard />
+                <CurrentlyBuildingCard key={currentlyBuildingRefreshKey} />
               </div>
             </section>
-            <ProjectsSection onTotalChange={setProjectsTotal} onSuccess={setSuccessMessage} />
+            <ProjectsSection
+              onTotalChange={setProjectsTotal}
+              onSuccess={setSuccessMessage}
+              onCurrentlyBuildingRefresh={() =>
+                setCurrentlyBuildingRefreshKey((current) => current + 1)
+              }
+            />
             <SkillsSection onTotalChange={setSkillsTotal} onSuccess={setSuccessMessage} />
             {successMessage && (
               <div

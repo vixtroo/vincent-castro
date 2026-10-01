@@ -12,7 +12,6 @@ export interface CurrentlyBuildingProject {
   user_id: string;
   is_currently_building: boolean;
   features: string[];
-  currently_building_stack: string;
 }
 
 type CurrentlyBuildingProjectResponse = {
