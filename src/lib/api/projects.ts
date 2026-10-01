@@ -11,7 +11,7 @@ export interface CurrentlyBuildingProject {
   created_at: string;
   user_id: string;
   is_currently_building: boolean;
-  features: string[] | null;
+  features: string[];
   currently_building_stack: string;
 }
 
@@ -29,6 +29,8 @@ type ApiProject = {
   description: string | null;
   project_image: string | null;
   tech_stack: string[] | null;
+  features: string[] | null;
+  is_currently_building: boolean | null;
 };
 
 type AllProjectsResponse = {
@@ -55,6 +57,8 @@ export type CreateProjectInput = {
   projectName: string;
   description: string;
   techStack: string[];
+  features: string[];
+  isCurrentlyBuilding: boolean;
 };
 
 export type UpdateProjectInput = {
@@ -63,6 +67,8 @@ export type UpdateProjectInput = {
   projectName: string;
   description: string;
   techStack: string[];
+  features: string[];
+  isCurrentlyBuilding: boolean;
 };
 
 export async function createProject({
@@ -70,6 +76,8 @@ export async function createProject({
   projectName,
   description,
   techStack,
+  features,
+  isCurrentlyBuilding,
 }: CreateProjectInput): Promise<void> {
   const baseUrl = process.env.BASE_URL;
   const formData = new FormData();
@@ -78,6 +86,8 @@ export async function createProject({
   formData.append("project_name", projectName);
   formData.append("description", description);
   formData.append("tech_stack", JSON.stringify(techStack));
+  formData.append("features", JSON.stringify(features));
+  formData.append("is_currently_building", String(isCurrentlyBuilding));
 
   const response = await authenticatedFetch(`${baseUrl}/api/projects/create-project`, {
     method: "POST",
@@ -97,6 +107,8 @@ export async function updateProject({
   projectName,
   description,
   techStack,
+  features,
+  isCurrentlyBuilding,
 }: UpdateProjectInput): Promise<void> {
   const baseUrl = process.env.BASE_URL;
   const formData = new FormData();
@@ -105,6 +117,8 @@ export async function updateProject({
   formData.append("project_name", projectName);
   formData.append("description", description);
   formData.append("tech_stack", JSON.stringify(techStack));
+  formData.append("features", JSON.stringify(features));
+  formData.append("is_currently_building", String(isCurrentlyBuilding));
 
   const response = await authenticatedFetch(
     `${baseUrl}/api/projects/${encodeURIComponent(id)}/update-project`,
@@ -142,7 +156,15 @@ export async function getCurrentlyBuildingProject(): Promise<CurrentlyBuildingPr
     throw new Error(result.message || result.error || "Failed to fetch currently building project");
   }
 
-  return result.data;
+  if (!result.data) return null;
+
+  return {
+    ...result.data,
+    features: (result.data.features ?? []).filter(
+      (feature): feature is string => typeof feature === "string" && feature.trim().length > 0,
+    ),
+    is_currently_building: result.data.is_currently_building === true,
+  };
 }
 
 export async function getAllProjects({ page, limit }: { page: number; limit: number }): Promise<PaginatedProjects> {
@@ -167,6 +189,10 @@ export async function getAllProjects({ page, limit }: { page: number; limit: num
       tech_stack: (project.tech_stack ?? []).filter(
         (technology): technology is string => typeof technology === "string" && technology.trim().length > 0,
       ),
+      features: (project.features ?? []).filter(
+        (feature): feature is string => typeof feature === "string" && feature.trim().length > 0,
+      ),
+      is_currently_building: project.is_currently_building === true,
       updated_at: project.updated_at,
     })),
     total: data.total,

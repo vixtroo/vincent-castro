@@ -301,6 +301,11 @@ function ProjectsSection({
                     <span className="whitespace-nowrap font-medium text-slate-700 dark:text-slate-200">
                       {project.project_name}
                     </span>
+                    {project.is_currently_building && (
+                      <span className="whitespace-nowrap rounded-md bg-blue-50 px-2 py-1 text-[10px] font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">
+                        Currently Building
+                      </span>
+                    )}
                   </div>
                 </td>
                 <td className="px-4 py-3">

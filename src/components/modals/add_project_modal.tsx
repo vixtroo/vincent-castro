@@ -21,6 +21,9 @@ export function AddProjectModal({ isOpen, onClose, onCreated }: AddProjectModalP
   const [projectImage, setProjectImage] = useState<File | null>(null);
   const [technologies, setTechnologies] = useState<string[]>([]);
   const [technologyInput, setTechnologyInput] = useState("");
+  const [features, setFeatures] = useState<string[]>([]);
+  const [featureInput, setFeatureInput] = useState("");
+  const [isCurrentlyBuilding, setIsCurrentlyBuilding] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState("");
   const [imagePreview, setImagePreview] = useState("");
@@ -72,6 +75,22 @@ export function AddProjectModal({ isOpen, onClose, onCreated }: AddProjectModalP
     }
   };
 
+  const addFeature = () => {
+    const feature = featureInput.trim();
+    if (!feature) return;
+    if (!features.some((item) => item.toLowerCase() === feature.toLowerCase())) {
+      setFeatures((current) => [...current, feature]);
+    }
+    setFeatureInput("");
+  };
+
+  const handleFeatureKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      addFeature();
+    }
+  };
+
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] ?? null;
     setError("");
@@ -116,6 +135,8 @@ export function AddProjectModal({ isOpen, onClose, onCreated }: AddProjectModalP
         projectName: projectName.trim(),
         description: description.trim(),
         techStack: technologies,
+        features,
+        isCurrentlyBuilding,
       });
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "Unable to create project.");
@@ -277,6 +298,66 @@ export function AddProjectModal({ isOpen, onClose, onCreated }: AddProjectModalP
                   <p className="mt-2 text-xs text-slate-400">Add at least one technology.</p>
                 )}
               </div>
+
+              <div>
+                <label htmlFor="project_features_input" className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200">
+                  Features
+                </label>
+                <div className="flex gap-2">
+                  <input
+                    id="project_features_input"
+                    type="text"
+                    value={featureInput}
+                    onChange={(event) => setFeatureInput(event.target.value)}
+                    onKeyDown={handleFeatureKeyDown}
+                    disabled={isSubmitting}
+                    placeholder="Add a feature"
+                    className={fieldClassName}
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    aria-label="Add feature"
+                    title="Add feature"
+                    disabled={isSubmitting || !featureInput.trim()}
+                    onClick={addFeature}
+                    className="h-10 w-10 shrink-0 rounded-md border-slate-200 dark:border-slate-700"
+                  >
+                    <Plus size={15} />
+                  </Button>
+                </div>
+                {features.length > 0 && (
+                  <ul className="mt-3 flex flex-wrap gap-2" aria-label="Selected features">
+                    {features.map((feature) => (
+                      <li key={feature} className="flex items-center gap-1 rounded-full bg-blue-50 py-1 pl-2.5 pr-1 text-xs font-medium text-blue-600 dark:bg-blue-950/60 dark:text-blue-300">
+                        {feature}
+                        <button
+                          type="button"
+                          aria-label={`Remove ${feature}`}
+                          title={`Remove ${feature}`}
+                          disabled={isSubmitting}
+                          onClick={() => setFeatures((current) => current.filter((item) => item !== feature))}
+                          className="flex h-5 w-5 items-center justify-center rounded-full hover:bg-blue-100 disabled:opacity-50 dark:hover:bg-blue-900"
+                        >
+                          <X size={12} />
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+
+              <label className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
+                <input
+                  type="checkbox"
+                  checked={isCurrentlyBuilding}
+                  onChange={(event) => setIsCurrentlyBuilding(event.target.checked)}
+                  disabled={isSubmitting}
+                  className="h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500 dark:border-slate-600"
+                />
+                Is Currently Building
+              </label>
             </div>
           </div>
 
