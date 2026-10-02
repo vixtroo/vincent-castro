@@ -19,7 +19,7 @@ export function ProjectsCard({
 	is_currently_building,
 }: ProjectsCardProps) {
 	return (
-		<article className="group flex h-full min-h-[450px] w-[364px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg transition duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900">
+		<article className="group flex h-full min-h-[450px] w-full min-w-0 max-w-[364px] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-lg transition duration-300 hover:-translate-y-1 dark:border-slate-700 dark:bg-slate-900">
 			<div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
 				{is_currently_building && (
 					<span className="absolute left-3 top-3 z-10 rounded-md bg-blue-600 px-2.5 py-1 text-xs font-semibold text-white">
