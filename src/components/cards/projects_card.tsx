@@ -41,7 +41,7 @@ export function ProjectsCard({
 				)}
 			</div>
 
-			<div className="flex flex-1 flex-col gap-4 p-4">
+			<div className="flex flex-1 flex-col gap-4 p-4 lg:text-left sm:text-center md:text-left">
 				<div className="space-y-2">
 					<h2 className="line-clamp-2 text-xl font-bold text-slate-950 dark:text-slate-100">
 						{project_name}

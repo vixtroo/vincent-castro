@@ -341,14 +341,14 @@ export default function Home() {
 
           {/* FRONTEND */}
 
-          {skillset.frontend.length > 0 && <div className="flex h-fit w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
+          {skillset.frontend.length > 0 && <div className="flex h-auto w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faDesktopAlt} className="text-4xl text-blue-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Frontend</h2>
             </div>
-            <ul className="flex list-disc flex-col gap-2 pl-4">
+            <ul className="grid grid-cols-1 list-disc gap-x-3 gap-y-2 pl-4 md:grid-cols-2">
               {skillset.frontend.map((skill, index) => (
-                <li key={index} className="text-sm dark:text-slate-400">
+                <li key={index} className="min-w-0 break-words text-sm dark:text-slate-400">
                   {skill}
                 </li>
               ))}
@@ -357,14 +357,14 @@ export default function Home() {
 
           {/* BACKEND */}
 
-          {skillset.backend.length > 0 && <div className="flex h-fit w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
+          {skillset.backend.length > 0 && <div className="flex h-auto w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faCodePullRequest} className="text-4xl text-green-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Backend</h2>
             </div>
-            <ul className="flex list-disc flex-col gap-2 pl-4">
+            <ul className="grid grid-cols-1 list-disc gap-x-3 gap-y-2 pl-4 md:grid-cols-2">
               {skillset.backend.map((skill, index) => (
-                <li key={index} className="text-sm dark:text-slate-400">
+                <li key={index} className="min-w-0 break-words text-sm dark:text-slate-400">
                   {skill}
                 </li>
               ))}
@@ -373,14 +373,14 @@ export default function Home() {
 
           {/* DATABASE */}
 
-          {skillset.database.length > 0 && <div className="flex h-fit w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
+          {skillset.database.length > 0 && <div className="flex h-auto w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faDatabase} className="text-4xl text-violet-500" />
               <h2 className="text-md font-semibold dark:text-slate-400">Database</h2>
             </div>
-            <ul className="flex list-disc flex-col gap-2 pl-4">
+            <ul className="grid grid-cols-1 list-disc gap-x-3 gap-y-2 pl-4 md:grid-cols-2">
               {skillset.database.map((skill, index) => (
-                <li key={index} className="text-sm dark:text-slate-400">
+                <li key={index} className="min-w-0 break-words text-sm dark:text-slate-400">
                   {skill}
                 </li>
               ))}
@@ -389,14 +389,14 @@ export default function Home() {
           
           {/* TOOLS AND OTHERS */}
           
-          {skillset.tools.length > 0 && <div className="flex h-fit w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
+          {skillset.tools.length > 0 && <div className="flex h-auto w-full flex-col gap-2 rounded-lg border border-slate-200 p-4 text-left shadow-lg dark:border-slate-600">
             <div className="flex gap-2 items-center">
               <FontAwesomeIcon icon={faTools} className="text-4xl text-orange-300" />
               <h2 className="text-md font-semibold dark:text-slate-400">Tools & Others</h2>
             </div>
-            <ul className="flex list-disc flex-col gap-2 pl-4">
+            <ul className="grid grid-cols-1 list-disc gap-x-3 gap-y-2 pl-4 md:grid-cols-2">
               {skillset.tools.map((skill, index) => (
-                <li key={index} className="text-sm dark:text-slate-400">
+                <li key={index} className="min-w-0 break-words text-sm dark:text-slate-400">
                   {skill}
                 </li>
               ))}
@@ -457,7 +457,7 @@ export default function Home() {
                 <label htmlFor="message" className="font-semibold">Message</label>
                 <textarea id="message" className="border border-slate-200 px-3 py-2 rounded-lg outline-none dark:border-slate-600 placeholder:text-slate-500 dark:placeholder:text-slate-600" placeholder="Tell me about your project/company" required value={formData.message} onChange={handleChange}></textarea>
               </div>
-              <Button type="submit" variant="default" size="default" className="w-full bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 sm:w-fit">Send Message <FontAwesomeIcon icon={faPaperPlane}/></Button>
+              <Button type="submit" variant="default" size="default" className="w-full bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600">Send Message <FontAwesomeIcon icon={faPaperPlane}/></Button>
             </form>
           </div>
           <div className="mx-auto flex w-full max-w-[220px] items-start justify-center animate-revolve lg:max-w-none lg:w-1/4">
