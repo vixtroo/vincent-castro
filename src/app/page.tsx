@@ -219,7 +219,7 @@ export default function Home() {
             <div className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:gap-4 lg:gap-6">
               <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600" onClick={() => {scrollToSection('projects')}}>View My Projects <FontAwesomeIcon icon={faArrowRight}/></Button>
               <Button asChild variant="outline" size="default" className="border-slate-200 dark:bg-slate-800 dark:border-slate-600">
-                <a href="/assets/VINCENT-CASTRO-RESUME.pdf" download="VINCENT-CASTRO-RESUME.pdf">
+                <a href="/assets/CASTRO-RESUME.pdf" download="CASTRO-RESUME.pdf">
                   Download Resume <FontAwesomeIcon icon={faCloudDownload}/>
                 </a>
               </Button>
