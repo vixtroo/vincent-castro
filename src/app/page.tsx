@@ -219,7 +219,7 @@ export default function Home() {
             <div className="mt-4 flex flex-col items-start gap-3 sm:flex-row sm:gap-4 lg:gap-6">
               <Button variant="default" size="default" className="bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600" onClick={() => {scrollToSection('projects')}}>View My Projects <FontAwesomeIcon icon={faArrowRight}/></Button>
               <Button asChild variant="outline" size="default" className="border-slate-200 dark:bg-slate-800 dark:border-slate-600">
-                <a href="/assets/Vincent-Castro-Resume.pdf" download="Vincent-Castro-Resume.pdf">
+                <a href="/assets/VINCENT-CASTRO-RESUME.pdf" download="VINCENT-CASTRO-RESUME.pdf">
                   Download Resume <FontAwesomeIcon icon={faCloudDownload}/>
                 </a>
               </Button>
@@ -300,7 +300,7 @@ export default function Home() {
 
             <div className="flex flex-col items-center gap-2 border-l border-slate-200 px-4 py-4 sm:px-6 xl:px-12">
               <FontAwesomeIcon icon={faUsers} className="text-blue-500 text-3xl"/>
-              <h1 className="text-3xl font-semibold mt-2 dark:text-slate-400">100+</h1>
+              <h1 className="text-3xl font-semibold mt-2 dark:text-slate-400">1000+</h1>
               <p className="text-sm text-slate-600 dark:text-slate-400">Users<br></br>Impacted</p>
             </div>
             
