@@ -36,7 +36,15 @@ import { DeleteProjectModal } from "@/components/modals/delete_project_modal";
 const surface =
   "rounded-lg border border-slate-200 bg-white shadow-sm dark:border-slate-700 dark:bg-slate-900";
 
-function SearchInput({ label }: { label: string }) {
+function SearchInput({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value?: string;
+  onChange?: (value: string) => void;
+}) {
   return (
     <label className="relative block w-full sm:w-52">
       <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
@@ -44,6 +52,8 @@ function SearchInput({ label }: { label: string }) {
         aria-label={label}
         placeholder={label}
         className="h-9 w-full rounded-md border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-blue-400 focus:ring-2 focus:ring-blue-100 dark:border-slate-700 dark:bg-slate-950 dark:focus:ring-blue-950"
+        value={value}
+        onChange={onChange ? (event) => onChange(event.target.value) : undefined}
       />
     </label>
   );
@@ -227,11 +237,23 @@ function ProjectsSection({
   const [selectedProject, setSelectedProject] = useState<PaginatedProjects["projects"][number] | null>(null);
   const [projectToDelete, setProjectToDelete] = useState<PaginatedProjects["projects"][number] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   useEffect(() => {
+    const debounceTimer = window.setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => window.clearTimeout(debounceTimer);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (searchTerm !== debouncedSearchTerm) return;
+
     let isCurrentRequest = true;
 
-    getAllProjects({ page: projects.page, limit: projects.limit })
+    getAllProjects({ page: projects.page, limit: projects.limit, search: debouncedSearchTerm })
       .then((result) => {
         if (isCurrentRequest) {
           setProjects(result);
@@ -251,7 +273,14 @@ function ProjectsSection({
     return () => {
       isCurrentRequest = false;
     };
-  }, [onTotalChange, projects.page, projects.limit, refreshKey]);
+  }, [debouncedSearchTerm, onTotalChange, projects.page, projects.limit, refreshKey, searchTerm]);
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setIsLoading(true);
+    setError(null);
+    setProjects((current) => ({ ...current, page: 1 }));
+  };
 
   const handleProjectCreated = () => {
     setIsAddProjectOpen(false);
@@ -306,7 +335,7 @@ function ProjectsSection({
           <p className="mt-1 text-sm text-slate-400">Manage your portfolio projects.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <SearchInput label="Search projects..." />
+          <SearchInput label="Search projects..." value={searchTerm} onChange={handleSearchChange} />
           <Button
             type="button"
             size="sm"
@@ -435,11 +464,23 @@ function SkillsSection({
   const [skillToUpdate, setSkillToUpdate] = useState<PaginatedSkills["skills"][number] | null>(null);
   const [skillToDelete, setSkillToDelete] = useState<PaginatedSkills["skills"][number] | null>(null);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
 
   useEffect(() => {
+    const debounceTimer = window.setTimeout(() => {
+      setDebouncedSearchTerm(searchTerm);
+    }, 300);
+
+    return () => window.clearTimeout(debounceTimer);
+  }, [searchTerm]);
+
+  useEffect(() => {
+    if (searchTerm !== debouncedSearchTerm) return;
+
     let isCurrentRequest = true;
 
-    getAllSkills({ page: skills.page, limit: skills.limit })
+    getAllSkills({ page: skills.page, limit: skills.limit, search: debouncedSearchTerm })
       .then((result) => {
         if (isCurrentRequest) {
           setSkills(result);
@@ -459,7 +500,14 @@ function SkillsSection({
     return () => {
       isCurrentRequest = false;
     };
-  }, [onTotalChange, skills.page, skills.limit, refreshKey]);
+  }, [debouncedSearchTerm, onTotalChange, skills.page, skills.limit, refreshKey, searchTerm]);
+
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+    setIsLoading(true);
+    setError(null);
+    setSkills((current) => ({ ...current, page: 1 }));
+  };
 
   const handleSkillCreated = () => {
     setIsAddSkillOpen(false);
@@ -511,7 +559,7 @@ function SkillsSection({
           <p className="mt-1 text-sm text-slate-400">Manage your technical skills and expertise.</p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <SearchInput label="Search skills..." />
+          <SearchInput label="Search skills..." value={searchTerm} onChange={handleSearchChange} />
           <Button
             type="button"
             size="sm"

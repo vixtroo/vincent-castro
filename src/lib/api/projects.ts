@@ -166,9 +166,18 @@ export async function getCurrentlyBuildingProject(): Promise<CurrentlyBuildingPr
   };
 }
 
-export async function getAllProjects({ page, limit }: { page: number; limit: number }): Promise<PaginatedProjects> {
+export async function getAllProjects({
+  page,
+  limit,
+  search,
+}: {
+  page: number;
+  limit: number;
+  search?: string;
+}): Promise<PaginatedProjects> {
   const baseUrl = process.env.BASE_URL;
   const searchParams = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (search?.trim()) searchParams.set("search", search);
 
   const response = await fetch(`${baseUrl}/api/projects/get-all-projects?${searchParams.toString()}`);
   const result: AllProjectsResponse = await response.json();

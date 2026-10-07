@@ -87,9 +87,18 @@ export async function deleteSkill(id: number): Promise<void> {
   }
 }
 
-export async function getAllSkills({ page, limit }: { page: number; limit: number }): Promise<PaginatedSkills> {
+export async function getAllSkills({
+  page,
+  limit,
+  search,
+}: {
+  page: number;
+  limit: number;
+  search?: string;
+}): Promise<PaginatedSkills> {
   const baseUrl = process.env.BASE_URL;
   const searchParams = new URLSearchParams({ page: String(page), limit: String(limit) });
+  if (search?.trim()) searchParams.set("search", search);
 
   const response = await fetch(`${baseUrl}/api/skills/get-all-skills?${searchParams.toString()}`);
   const result: AllSkillsResponse = await response.json();
